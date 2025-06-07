@@ -1,3 +1,3 @@
 
-class Pessoa:
+class Usuario:
     pass
