@@ -67,7 +67,7 @@ Gênero: {self.genero}
             else:
                 print('E-mail inválido! Digite novamente.')
                 
-    def validar_telefone(): #função para validar telefone
+   def validar_telefone():
         ddds_validos = { #todos os ddds do brasil
         '11', '12', '13', '14', '15', '16', '17', '18', '19',
         '21', '22', '24', '27', '28',
@@ -124,6 +124,7 @@ Gênero: {self.genero}
             except ValueError:
                 print("Formato inválido. Use o formato dd/mm/yyyy.")
     
+
     def validar_genero(): #função para escolher o genero
         opcoes = {
         1: "Masculino",
@@ -142,6 +143,7 @@ Gênero: {self.genero}
             try:
                 opcao = int(input("Escolha uma opção (1-4): "))
                 if opcao in opcoes:
+
                     if opcao == 4:
                         genero_personalizado = input("Por favor, digite como você se identifica: ").strip()
                         if genero_personalizado:
