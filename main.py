@@ -38,6 +38,62 @@ def menuOpcoes():
     print("="*22)
     return captura_input_menu(12)
 
+if __name__ == "__main__":
+    while True:
+        opcao_digitada = menuOpcoes()
+        
+        if opcao_digitada == 1:
+            os.system("cls")
+            cadastrar_professor()
+
+        elif opcao_digitada == 2:
+            os.system("cls")
+            cadastrar_aluno()
+
+        elif opcao_digitada == 3:
+            os.system("cls")
+            criar_oficina()
+
+        elif opcao_digitada == 4:
+            os.system("cls")
+            inscrever_aluno_em_oficina()
+
+        elif opcao_digitada == 5:
+            os.system("cls")
+            associar_professor_a_oficina()
+
+        elif opcao_digitada == 6:
+            os.system("cls")
+            registrar_frequencia_aluno()
+
+        elif opcao_digitada == 7:
+            os.system("cls")
+            listar_professores()
+
+        elif opcao_digitada == 8:
+            os.system("cls")
+            listar_professores()
+
+        elif opcao_digitada == 9:
+            os.system("cls")
+            listar_oficinas()
+
+        elif opcao_digitada == 10:
+            os.system("cls")
+            ver_oficinas_professor()
+
+        elif opcao_digitada == 11:
+            os.system("cls")
+            ver_alunos_inscritos_oficina()
+
+        elif opcao_digitada == 12:
+            os.system("cls")
+            ver_alunos_inscritos_oficina()
+
+        elif opcao_digitada == 0:
+            os.system("cls")
+            print("Você encerrou o programa")
+            break
 
 
 
