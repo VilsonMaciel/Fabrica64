@@ -1,31 +1,10 @@
 
 
-# modelos/oficina.py
 
-class Oficina:
-    """
-    Classe para representar uma oficina oferecida.
-    """
-    def __init__(self, nome, descricao, capacidade_maxima):
-        """
-        Inicializa uma nova instância de Oficina.
-
-        Args:
-            nome (str): O nome da oficina.
-            descricao (str): Uma breve descrição da oficina.
-            capacidade_maxima (int): O número máximo de alunos que a oficina pode ter.
-        """
-        if not nome or not descricao or capacidade_maxima <= 0:
-            raise ValueError("Nome, descrição e capacidade_maxima (maior que zero) são obrigatórios.")
-            
-        self.__nome = nome
-        self.__descricao = descricao
-        self.__capacidade_maxima = capacidade_maxima
-        self.__alunos_inscritos = [] # Lista de alunos inscritos nesta oficina
-        self.__professores_associados = [] # Lista de professores que ministram esta oficina
 
     def get_nome(self):
         """Retorna o nome da oficina."""
+        
         return self.__nome
 
     def get_descricao(self):
