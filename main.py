@@ -1,11 +1,11 @@
-<<<<<<< HEAD
+"""
 import modelos/pessoa.py
 import modelos/usuario.py
 import modelos/aluno.py
 import modelos/professor.py
 import modelos/oficina.py
 import os
-=======
+"""
 
 
 
@@ -31,4 +31,3 @@ def menuOpcoes():
     print("\n11. Ver Alunos Inscritos em uma Oficina")
     print("\n12. Ver Frequência de um Aluno em uma Oficina")
     print("\n0. Sair")
->>>>>>> 2f2a59bd8f1ee36143e50b393f82ad99ef47ea51
