@@ -67,7 +67,7 @@ Gênero: {self.genero}
             else:
                 print('E-mail inválido! Digite novamente.')
                 
-   def validar_telefone():
+    def validar_telefone():
         ddds_validos = { #todos os ddds do brasil
         '11', '12', '13', '14', '15', '16', '17', '18', '19',
         '21', '22', '24', '27', '28',
