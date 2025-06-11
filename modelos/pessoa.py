@@ -3,23 +3,13 @@ import datetime
 
 class Pessoa:
     def __init__(self, nome, cpf, email, data_nasc, telefone, genero):
-        self.nome = nome
-        self.cpf = cpf 
-        self.email = email
-        self.data_nasc = data_nasc #dd/mm/YYYY
-        self.telefone = telefone 
-        self.genero = genero #masculino, feminino, não binário
+        self.__nome = nome
+        self.__cpf = cpf 
+        self.__email = email
+        self.__data_nasc = data_nasc #dd/mm/YYYY
+        self.__telefone = telefone 
+        self.__genero = genero #masculino, feminino, não binário
     
-    def __str__ (self):
-        return f""" ---- Dados do Usuário ----
-Nome: {self.nome}  
-CPF: {self.cpf}
-Email: {self.email}
-Data de nascimento: {self.data_nasc}
-Telefone: {self.telefone}
-Gênero: {self.genero}
-"""
-
     def validar_nome(): #função para validar o nome
         while True:
             try:
@@ -31,6 +21,17 @@ Gênero: {self.genero}
                 return nome
             except ValueError as e:
                 print(f"Erro: {e}")
+    
+    @property
+    def nome(self):
+        return self.__nome
+    
+    @nome.setter
+    def nome(self, novo_nome):
+        if self.validar_nome(novo_nome):
+            self.__nome = novo_nome
+        else: 
+            raise ValueError('Nome inválido!')
 
     def validar_cpf(): #função para validar o cpf
         def calcular_digito(cpf, peso_inicial): #validação matemática dos dígitos verificadores do CPF
@@ -39,7 +40,7 @@ Gênero: {self.genero}
             return '0' if resto < 2 else str(11 - resto)
                 
         while True:
-            cpf = int(input("CPF (somente números): "))
+            cpf = input("CPF (somente números): ").strip()
             if len(cpf) == 11 and cpf.isdigit():
             #verifica se todos os dígitos são iguais (ex: 11111111111), o que é inválido
                 if cpf == cpf[0] * 11:
@@ -57,17 +58,39 @@ Gênero: {self.genero}
             else:
                 print("CPF inválido! Deve conter exatamente 11 dígitos numéricos.")
     
+    @property
+    def cpf(self):
+        return self.__cpf
+    
+    @cpf.setter
+    def cpf(self, novo_cpf):
+        if self.validar_cpf(novo_cpf):
+            self.__cpf = novo_cpf
+        else:
+            raise ValueError('CPF inválido!')
+    
     def validar_email(email): #função para validar email de usuários
         padrao = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
         while True: 
-            email = input("Email: ").lower()         
+            email = input("Email: ").lower().strip()         
             if re.match(padrao, email):
                     print('E-mail válido')
                     return email
             else:
                 print('E-mail inválido! Digite novamente.')
-                
-   def validar_telefone():
+
+    @property
+    def email(self):
+        return self.__email
+    
+    @email.setter
+    def email(self, novo_email):
+        if self.validar_email(novo_email):
+            self.__email = novo_email
+        else:
+            raise ValueError('E-mail inválido!')
+    
+    def validar_telefone():
         ddds_validos = { #todos os ddds do brasil
         '11', '12', '13', '14', '15', '16', '17', '18', '19',
         '21', '22', '24', '27', '28',
@@ -82,7 +105,7 @@ Gênero: {self.genero}
         }
 
         while True: 
-            telefone = input('Telefone (com DDD): ')
+            telefone = input('Telefone (com DDD): ').strip()
             (r"[^\d]", "", telefone)
 
             if not re.fullmatch(r"\d{10,11}", telefone):
@@ -106,6 +129,17 @@ Gênero: {self.genero}
                 return f"({ddd}) {telefone[2:7]}-{telefone[7:]}"
             else:
                 return f"({ddd}) {telefone[2:6]}-{telefone[6:]}"
+    
+    @property
+    def telefone(self):
+        return self.__telefone
+    
+    @telefone.setter
+    def telefone(self, novo_telefone):
+        if self.validar_telefone(novo_telefone):
+            self.__telefone = novo_telefone
+        else:
+            raise ValueError('Telefone inválido!')
 
     def validar_data_nasc(): #função para validar data de nascimento
         while True:
@@ -123,8 +157,18 @@ Gênero: {self.genero}
                     return data_nasc
             except ValueError:
                 print("Formato inválido. Use o formato dd/mm/yyyy.")
-    
 
+    @property
+    def data_nasc(self):
+        return self.__data_nasc
+    
+    @data_nasc.setter
+    def data_nasc(self, nova_data_nasc):
+        if self.validar_data_nasc(nova_data_nasc):
+            self.__data_nasc = nova_data_nasc
+        else:
+            raise ValueError('Data inválida!')
+    
     def validar_genero(): #função para escolher o genero
         opcoes = {
         1: "Masculino",
@@ -143,7 +187,6 @@ Gênero: {self.genero}
             try:
                 opcao = int(input("Escolha uma opção (1-4): "))
                 if opcao in opcoes:
-
                     if opcao == 4:
                         genero_personalizado = input("Por favor, digite como você se identifica: ").strip()
                         if genero_personalizado:
@@ -156,4 +199,24 @@ Gênero: {self.genero}
                     print("Opção inválida. Escolha um número entre 1 e 4.")
             except ValueError:
                 print("Por favor, digite um número válido.")
+    
+    @property
+    def genero(self):
+        return self.__genero
+    
+    @genero.setter
+    def genero(self, novo_genero):
+        if self.validar_genero(novo_genero):
+            self.__genero = novo_genero
+
+
+    def __str__ (self):
+        return f""" ---- Dados do Usuário ----
+Nome: {self.__nome}  
+CPF: {self.__cpf}
+Email: {self.__email}
+Data de nascimento: {self.__data_nasc}
+Telefone: {self.__telefone}
+Gênero: {self.__genero}
+"""
 
