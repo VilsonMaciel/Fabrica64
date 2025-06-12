@@ -1,4 +1,4 @@
-class professor:
+class Professor:
 
     def __init__(self,nome,email,cpf,login,senha):
 
