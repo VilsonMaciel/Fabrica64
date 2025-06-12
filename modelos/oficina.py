@@ -1,27 +1,58 @@
 
+import os
+
+#oficiana
+
+# modelos/oficina.py
+
+class Oficina:
+    """
+    Classe para representar uma oficina oferecida.
+    """
+    def __init__(self, nome, descricao, capacidade_maxima):
+        """
+        Inicializa uma nova instância de Oficina.
+        Args:
+            nome (str): O nome da oficina.
+            descricao (str): Uma breve descrição da oficina.
+            capacidade_maxima (int): O número máximo de alunos que a oficina pode ter.
+        """
+        self.nome = nome
+        self.descricao = descricao
+        self.capacidade_maxima = capacidade_maxima
 
 
-def get_nome(self):
+        if not nome or not descricao or capacidade_maxima <= 0:
+            raise ValueError("Nome, descrição e capacidade_maxima (maior que zero) são obrigatórios.")
+            
+        self.__nome = nome
+        self.__descricao = descricao
+        self.__capacidade_maxima = capacidade_maxima
+        self.__alunos_inscritos = [] # Lista de alunos inscritos nesta oficina
+        self.__professores_associados = [] # Lista de professores que ministram esta oficina
+
+    def get_nome(self):
         """Retorna o nome da oficina."""
         
         return self.__nome
 
-def get_descricao(self):
+    def get_descricao(self):
         """Retorna a descrição da oficina."""
         return self.__descricao
 
-def get_capacidade_maxima(self):
+    def get_capacidade_maxima(self):
         """Retorna a capacidade máxima de alunos da oficina."""
         return self.__capacidade_maxima
-def get_alunos_inscritos(self):
+
+    def get_alunos_inscritos(self):
         """Retorna a lista de alunos inscritos na oficina."""
         return self.__alunos_inscritos
 
-def get_professores_associados(self):
+    def get_professores_associados(self):
         """Retorna a lista de professores associados à oficina."""
         return self.__professores_associados
 
-def adicionar_aluno(self, aluno):
+    def adicionar_aluno(self, aluno):
         """
         Adiciona um aluno à oficina, se houver capacidade.
         Args:
@@ -41,7 +72,7 @@ def adicionar_aluno(self, aluno):
             print(f"Oficina {self.get_nome()} está cheia. Não é possível adicionar mais alunos.")
             return False
 
-def remover_aluno(self, aluno):
+    def remover_aluno(self, aluno):
         """
         Remove um aluno da oficina.
         Args:
@@ -57,7 +88,7 @@ def remover_aluno(self, aluno):
             print(f"Aluno {aluno.get_nome()} não está inscrito na oficina {self.get_nome()}.")
             return False
 
-def associar_professor(self, professor):
+    def associar_professor(self, professor):
         """
         Associa um professor a esta oficina.
         Args:
@@ -68,7 +99,8 @@ def associar_professor(self, professor):
             print(f"Professor {professor.get_nome()} associado à oficina {self.get_nome()}.")
         else:
             print(f"Professor {professor.get_nome()} já está associado à oficina {self.get_nome()}.")
-def __str__(self):
+
+    def __str__(self):
         """
         Retorna uma representação em string da Oficina.
         """
