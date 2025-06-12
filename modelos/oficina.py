@@ -1,16 +1,27 @@
 
 
 
+
 def get_nome(self):
+
+    def get_nome(nome):
+
         """Retorna o nome da oficina."""
         
-        return self.__nome
+        return "Nome da Oficina"
+
 
 def get_descricao(self):
         """Retorna a descrição da oficina."""
         return self.__descricao
 
 def get_capacidade_maxima(self):
+
+    def get_descricao(drescricao):
+        return "Marcar pontos e inpedir que o time adiversario marque pontos."
+
+    def get_capacidade_maxima(capacidade_maxima):
+
         """Retorna a capacidade máxima de alunos da oficina."""
         return self.__capacidade_maxima
 def get_alunos_inscritos(self):
