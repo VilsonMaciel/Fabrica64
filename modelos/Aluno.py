@@ -3,7 +3,7 @@ from oficina import Oficina
 import json
 import datetime
 import random
-
+from os import system
 
 class Aluno(Pessoa):
     _matriculas_usadas = set() # Set é um conjunto de dados que não é possível repetir elementos
@@ -61,5 +61,11 @@ class Aluno(Pessoa):
     def _inscrever_aluno_em_oficina(self, aluno_a_inscrever, oficina_alvo):
 
         confirmacao = input(f"Confirma a inscrição de {aluno_a_inscrever.nome} na oficina {oficina_alvo.nome} [S/N]?").strip().lower()
-
-
+        if confirmacao == 'n':
+            return f"Inscrição cancelada !!"
+        
+        else:
+            aluno_a_inscrever._oficinas_inscritas.append(oficina_alvo)
+            oficina_alvo._alunos_inscritos.append(aluno_a_inscrever)
+            return f"Inscrição do(a) Aluno(a) {aluno_a_inscrever.nome} inscrito com sucesso"
+        
