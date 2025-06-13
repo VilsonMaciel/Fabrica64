@@ -1,7 +1,9 @@
 from pessoa import Pessoa
+from oficina import Oficina
 import json
 import datetime
 import random
+
 
 class Aluno(Pessoa):
     _matriculas_usadas = set() # Set é um conjunto de dados que não é possível repetir elementos
