@@ -4,27 +4,36 @@ import datetime
 import random
 
 class Aluno(Pessoa):
-    def __init__(self,nome, cpf, email, data_nasc, telefone, genero, matricula):
+    _matriculas_usadas = set() # Set é um conjunto de dados que não é possível repetir elementos
+
+    def __init__(self,nome, cpf, email, data_nasc, telefone, genero):
         super().__init__(self, nome, cpf, email, data_nasc, telefone, genero)
-        self.matricula = self.gerar_matricula()
-        self.oficinas_inscritas = []
-        self.frequencia = {}
+        self._matricula = self._gerar_matricula()
+        self._oficinas_inscritas = []
+        self._frequencia = {}
         return
+        
+    @property
+    def matricula(self):
+        "GETTER para matrícula"
+        return self._matricula
     
+    #Função para importar alunos do arquivo Alunos.json
     def importando_arquivo_alunos(self):
         try:
-            with open("Alunos.json", 'r', encoding='uft-8') as arquivo:
-                dados = json.load(arquivo)
+            with open("Alunos.json", 'r', encoding='uft-8') as arquivo: #Abrindo o arquivo "Alunos.json" como "arquivo" dentro do meu código
+                dados = json.load(arquivo) #Carregando os dados do meu arquivo que chamei de "arquivo"
             for dados_alunos in dados:
                 aluno_obj = Aluno(dados_alunos['nome'], dados_alunos['cpf'], dados_alunos['email'], dados_alunos['data_nasc'],
                                   dados_alunos['telefone'], dados_alunos['genero'], dados_alunos['matricula'])
                 aluno_obj.oficinas_inscritas = dados_alunos.get('oficinas_inscritas', [])
-                aluno_obj.frequencia = dados_alunos.get('frequencia', {})
-                self.lista_de_alunos.append(aluno_obj)
+                aluno_obj.frequencia = dados_alunos.get('frequencia', {})  
+                self.lista_de_alunos.append(aluno_obj) #Extraindo as informações que existem em forma de dicionário no arquivo .json e os convertando para Objetos Alunos.
 
         except FileNotFoundError:
             self.lista_de_alunos = []
-            
+
+    #Função para salvar os alunos no arquivo .json ATENÇÃO, DEVE SER CHAMADA SEMPRE QUE HOUVER ALTERAÇÃO NA LISTA DE ALUNOS!!!!!!!        
     def salvar_arquivo_alunos(self):
 
         dados = [{"nome": aluno.nome, "cpf": aluno.cpf, "email": aluno.email, 
@@ -35,7 +44,15 @@ class Aluno(Pessoa):
             json.dump(dados, arquivo, indent= 4)
 
 
+    #Função para gerar matrículas aleatórias iniciando pelo ano atual.
     def _gerar_matricula(self):
-        ano_atual = datetime.date.today().year
-        numero_aleatorio = random.randint(100000, 999999)
+
+        ano_atual = datetime.date.today().year #Capturando o ano atual
+        while True: #Entrando no laço de verificação da matrícula.
+            numero_aleatorio = random.randint(100000, 999999) #Criando um número aleatório de 6 dígitos (entre 100000 e 999999)
+            matricula_gerada = f"{ano_atual}.{numero_aleatorio}" #Juntando os ano atual e o número aleatório para gerar uma matrícula do tipo "AAAA.XXXXXX"
+
+            if matricula_gerada not in self._matriculas_usadas: #Verificando se a matrícula atual já existe.
+                self._matriculas_usadas.add(matricula_gerada)
+            return matricula_gerada        
         
