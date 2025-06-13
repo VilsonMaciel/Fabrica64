@@ -6,16 +6,15 @@ class Usuario(Pessoa):
         super().__init__(nome, cpf, email, data_nasc, telefone, genero)
         if not login or not senha: 
             raise ValueError("Senha não pode ser vazia.") 
-        self.__login = {"email": email, "CPF": cpf} # utiliza CPF ou email
+        self.__login = {"email": email, "CPF": cpf} # utiliza CPF e/ou email
         self.__senha = senha # 8 digitos, 1 maiuculo, numero e simbolo
 
     @staticmethod
     def validar_senha(senha: str) -> bool:
-        # Pelo menos 8 caracteres
-        comprimento_valido = re.fullmatch(r'.{8,}', senha)
-        tem_maiuscula = re.search(r'[A-Z]', senha)
-        tem_numero = re.search(r'\d', senha)
-        tem_especial = re.search(r'[!@#$%^&*(),.?":{}|<>]', senha)
+        comprimento_valido = re.fullmatch(r'.{8,}', senha) # Comprova se a senha tem pelo menos 8 caracteres.
+        tem_maiuscula = re.search(r'[A-Z]', senha) # Comprova se a senha tem pelo menos uma letra maiúscula.
+        tem_numero = re.search(r'\d', senha) # Comprova se a senha tem pelo menos um número.
+        tem_especial = re.search(r'[!@#$%^&*(),.?":{}|<>]', senha) # Comprova se a senha tem pelo menos um símbolo especial.
         return bool(comprimento_valido and tem_maiuscula and tem_numero and tem_especial)
     
     def autenticar(self, login: str, senha: str) -> bool: # Verifica se o login e a senha estão corretos.
