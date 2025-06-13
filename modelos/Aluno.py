@@ -58,3 +58,8 @@ class Aluno(Pessoa):
                 self._matriculas_usadas.add(matricula_gerada)
             return matricula_gerada        
         
+    def _inscrever_aluno_em_oficina(self, aluno_a_inscrever, oficina_alvo):
+
+        confirmacao = input(f"Confirma a inscrição de {aluno_a_inscrever.nome} na oficina {oficina_alvo.nome} [S/N]?").strip().lower()
+
+
