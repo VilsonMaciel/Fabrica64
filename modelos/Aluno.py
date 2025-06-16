@@ -42,6 +42,7 @@ class Aluno(Pessoa):
                   "data_nasc": aluno.data_nasc, "telefone": aluno.telefone, "genero": aluno.genero,
                   "matricula": aluno.matricula, "oficinas_inscritas": aluno.oficinas_inscritas, "frequencia": aluno.frequencia}
                     for aluno in self.lista_de_alunos]
+        
         with open("Aluno.json", 'w', encoding='utf-8') as arquivo:
             json.dump(dados, arquivo, indent= 4)
 
