@@ -17,8 +17,13 @@ class Aluno(Pessoa):
         
     @property
     def matricula(self):
-        "GETTER para matrícula"
+        """GETTER para matrícula"""
         return self._matricula
+    
+    @property
+    def oficinas_inscrias(self):
+        """GETTER para as oficinas que o aluno está inscrito."""
+        return 
     
     #Função para importar alunos do arquivo Alunos.json
     def importando_arquivo_alunos(self):
