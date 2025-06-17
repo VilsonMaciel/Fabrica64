@@ -4,7 +4,7 @@ from .pessoa import Pessoa
 class Usuario(Pessoa):
     def __init__(self, nome, cpf, email, data_nasc, telefone, genero, login, senha):
         super().__init__(nome, cpf, email, data_nasc, telefone, genero)
-        if not login or not senha: 
+        if not senha: 
             raise ValueError("Senha não pode ser vazia.") 
         self.__login = {"email": email, "CPF": cpf} # utiliza CPF e/ou email
         self.__senha = senha # 8 digitos, 1 maiuculo, numero e simbolo
