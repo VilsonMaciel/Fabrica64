@@ -23,7 +23,12 @@ class Aluno(Pessoa):
     @property
     def oficinas_inscrias(self):
         """GETTER para as oficinas que o aluno está inscrito."""
-        return 
+        return self._oficinas_inscritas
+    
+    @property
+    def frequencia(self):
+        """GETTER para frequencia"""
+        return self._frequencia
     
     #Função para importar alunos do arquivo Alunos.json
     def importando_arquivo_alunos(self):
