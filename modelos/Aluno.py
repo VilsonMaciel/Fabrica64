@@ -8,12 +8,26 @@ from os import system
 class Aluno(Pessoa):
     _matriculas_usadas = set() # Set é um conjunto de dados que não é possível repetir elementos
 
-    def __init__(self,nome, cpf, email, data_nasc, telefone, genero):
-        super().__init__(self, nome, cpf, email, data_nasc, telefone, genero)
+    def __init__(self, nome, cpf, email, data_nasc, telefone, genero):
+        super().__init__(nome, cpf, email, data_nasc, telefone, genero)
         self._matricula = self._gerar_matricula()
         self._oficinas_inscritas = []
         self._frequencia = {}
-        return
+
+    def __str__(self):
+        """Função para exibir as informações do aluno"""
+        info = f"""
+===============================================
+    Ficha do aluno: {self.nome}\n
+    Matrícula: {self.matricula}\n
+===============================================
+    CPF: \t\t{self.cpf}\n
+    Email: \t{self.email}\n
+    Telefone: \t{self.telefone}\n
+    Data de Nascimento: \t{self.data_nasc}
+    Gênero: \t{self.genero}\n
+                """
+        return info
         
     @property
     def matricula(self):
@@ -45,7 +59,7 @@ class Aluno(Pessoa):
         except FileNotFoundError:
             self.lista_de_alunos = []
 
-    #Função para salvar os alunos no arquivo .json ATENÇÃO, DEVE SER CHAMADA SEMPRE QUE HOUVER ALTERAÇÃO NA LISTA DE ALUNOS!!!!!!!        
+    ####### Função para salvar os alunos no arquivo .json ATENÇÃO, DEVE SER CHAMADA SEMPRE QUE HOUVER ALTERAÇÃO NA LISTA DE ALUNOS!!!!!!! ########        
     def salvar_arquivo_alunos(self):
 
         dados = [{"nome": aluno.nome, "cpf": aluno.cpf, "email": aluno.email, 
@@ -61,12 +75,14 @@ class Aluno(Pessoa):
     def _gerar_matricula(self):
 
         ano_atual = datetime.date.today().year #Capturando o ano atual
+
         while True: #Entrando no laço de verificação da matrícula.
             numero_aleatorio = random.randint(100000, 999999) #Criando um número aleatório de 6 dígitos (entre 100000 e 999999)
             matricula_gerada = f"{ano_atual}.{numero_aleatorio}" #Juntando os ano atual e o número aleatório para gerar uma matrícula do tipo "AAAA.XXXXXX"
 
             if matricula_gerada not in self._matriculas_usadas: #Verificando se a matrícula atual já existe.
                 self._matriculas_usadas.add(matricula_gerada)
+                print(f"O(A) aluno(a) {self.nome} foi matriculado(a) com sucesso e a sua matrícula é {matricula_gerada} !!")
             return matricula_gerada        
         
     def _inscrever_aluno_em_oficina(self, aluno_a_inscrever, oficina_alvo):
