@@ -1,13 +1,16 @@
 import re
 from .pessoa import Pessoa
+from .tipo_usuario import TipoUsuario
+from .tipo_usuario import role_required
 
 class Usuario(Pessoa):
-    def __init__(self, nome, cpf, email, data_nasc, telefone, genero, login, senha):
+    def __init__(self, nome, cpf, email, data_nasc, telefone, genero, senha, tipousuario):
         super().__init__(nome, cpf, email, data_nasc, telefone, genero)
         if not senha: 
             raise ValueError("Senha não pode ser vazia.") 
         self.__login = {"email": email, "CPF": cpf} # utiliza CPF e/ou email
         self.__senha = senha # 8 digitos, 1 maiuculo, numero e simbolo
+        self.__tipo_usuario = tipousuario
 
     @staticmethod
     def validar_senha(senha: str) -> bool:
@@ -30,7 +33,12 @@ class Usuario(Pessoa):
     def senha(self): # Retorna a senha do usuário.
         return self.__senha
     
+    @property
+    def tipo_usuario(self):
+        return self.__tipo_usuario
+
     @senha.setter
+    @role_required(TipoUsuario.adm)
     def senha(self, nova_senha): # Define uma nova senha.
         if not nova_senha:
             raise ValueError("A senha não pode ser vazia.")
@@ -39,5 +47,6 @@ class Usuario(Pessoa):
         self.__senha = nova_senha
     
     def __str__(self):
-        return f"Usuário: {self.get_login()}, {super().__str__()}" # to do: Texto de apresentação 
+        login_info = f"Email: {self.__login['email']}, CPF: {self.__login['CPF']}"
+        return f"Usuário: {login_info}, {super().__str__()}" # to do: Texto de apresentação 
  
