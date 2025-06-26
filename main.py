@@ -7,7 +7,6 @@ import json
 import os
 
 
-
 def captura_input_menu(max_opcao):
     while True:
         try:
