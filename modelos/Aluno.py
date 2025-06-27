@@ -91,8 +91,32 @@ class Aluno(Pessoa):
         if confirmacao == 'n':
             return f"Inscrição cancelada !!"
         
-        else:
+        elif confirmacao == 's':
             aluno_a_inscrever._oficinas_inscritas.append(oficina_alvo)
             oficina_alvo._alunos_inscritos.append(aluno_a_inscrever)
             return f"Inscrição do(a) Aluno(a) {aluno_a_inscrever.nome} inscrito com sucesso"
+               
+        else:
+            print("Digite uma opção válida [S/N]")
+            return Aluno._inscrever_aluno_em_oficina(self, aluno_a_inscrever, oficina_alvo)
+
         
+    def _remover_aluno_da_oficina(self, aluno_a_remover, oficina_alvo):
+        
+        if aluno_a_remover not in oficina_alvo._alunos_inscritos:
+            return f"O aluno {aluno_a_remover.nome} não está matriculado nesta oficina"
+        
+        else:    
+            confirmacao = input(f"Confirma a remoção de {aluno_a_remover.nome} da oficina {oficina_alvo.nome} [S/N]").strip().lower()
+
+            if confirmacao == 'n':
+                return f"Remoção cancelada"
+            
+            elif confirmacao == 's':
+                oficina_alvo._alunos_inscritos.remove(aluno_a_remover)
+                print(f"Remoção do aluno {aluno_a_remover.nome} da oficina {oficina_alvo.nome} concluída com sucesso!! ")
+
+            else:
+                print("Digite uma opção válida (S/N)")
+                return Aluno._remover_aluno_da_oficina(self, aluno_a_remover, oficina_alvo)
+            
