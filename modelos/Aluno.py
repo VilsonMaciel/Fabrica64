@@ -73,12 +73,11 @@ class Aluno(Pessoa):
 
     #Função para gerar matrículas aleatórias iniciando pelo ano atual.
     def _gerar_matricula(self):
-
         ano_atual = datetime.date.today().year #Capturando o ano atual
 
         while True: #Entrando no laço de verificação da matrícula.
             numero_aleatorio = random.randint(100000, 999999) #Criando um número aleatório de 6 dígitos (entre 100000 e 999999)
-            matricula_gerada = f"{ano_atual}.{numero_aleatorio}" #Juntando os ano atual e o número aleatório para gerar uma matrícula do tipo "AAAA.XXXXXX"
+            matricula_gerada =  str(f"{ano_atual}.{numero_aleatorio}") #Juntando os ano atual e o número aleatório para gerar uma matrícula do tipo "AAAA.XXXXXX"
 
             if matricula_gerada not in self._matriculas_usadas: #Verificando se a matrícula atual já existe.
                 self._matriculas_usadas.add(matricula_gerada)
@@ -122,22 +121,81 @@ class Aluno(Pessoa):
                 print("Digite uma opção válida (S/N)")
                 return Aluno._remover_aluno_da_oficina(self, aluno_a_remover, oficina_alvo)
             
-    def _buscar_aluno(self):
+    def _pesquisar_alunos(self):
         
-        print("=" * 45)
+        print("-" * 45)
         termo = input("PESQUISAR ALUNO: ")
         alunos_encontrados = []
+        
+        if not termo:
+            print("O campo de pesquisa não pode estar vazio!!")
+            return None
 
         for aluno in self.lista_de_alunos:
-            if termo in aluno.nome:
+            if (termo in aluno.nome.lower() or
+                termo in aluno.cpf.lower() or
+                termo in aluno.email.lower() or
+                termo in aluno.matricula.lower()):
+                
                 alunos_encontrados.append(aluno)
-            elif termo in aluno.cpf:
-                alunos_encontrados.append(aluno)
-            elif termo in aluno.email:
-                alunos_encontrados.append(aluno)
-            elif termo in aluno.matricula:
-                alunos_encontrados.append(aluno)
+
+        if not alunos_encontrados:
+            print("Nenhum aluno encontrado com esse termo.")
+            return None
 
         for aluno in enumerate(alunos_encontrados, 1):
             print(aluno)
-            print("\n")
+            print("-" * 45)
+    
+    def _pesquisar_e_selecionar_aluno(self):
+
+        print("-" * 45)
+        termo = input("PESQUISAR ALUNO (por nome, cpf, email, etc): ").lower() # .lower() para busca insensível
+        print("-" * 45)
+        
+        if not termo:
+            print("Termo de pesquisa não pode ser vazio.")
+            return None
+
+        alunos_encontrados = []
+        for aluno in self.lista_de_alunos:
+            # Convertemos todos os campos para minúsculas para a comparação
+            if (termo in aluno.nome.lower() or
+                termo in str(aluno.matricula).lower() or
+                termo in aluno.cpf.lower() or
+                termo in aluno.email.lower()):
+                alunos_encontrados.append(aluno)
+
+        # CASO 1: Nenhum aluno encontrado
+        if not alunos_encontrados:
+            print("Nenhum aluno encontrado com este termo de pesquisa.")
+            return None
+
+        # CASO 2: Apenas um aluno encontrado
+        if len(alunos_encontrados) == 1:
+            print("Apenas um aluno encontrado:")
+            print(f"-> {alunos_encontrados[0]}") # Imprime usando o __str__ do aluno
+            return alunos_encontrados[0] # Captura e retorna o único aluno
+
+        # CASO 3: Vários alunos encontrados, pedir para o utilizador escolher
+        print("Vários alunos encontrados. Por favor, escolha um:")
+        for indice, aluno in enumerate(alunos_encontrados, 1):
+            print(f"{indice}. {aluno}") # Saída formatada: "1. [Matrícula: 101] ..."
+
+        # Loop para garantir que o utilizador escolha uma opção válida
+        while True:
+            try:
+                escolha = int(input("\nDigite o número do aluno que deseja selecionar: "))
+                if 1 <= escolha <= len(alunos_encontrados):
+                    # O utilizador escolheu um número válido.
+                    # "Capturamos" o aluno da lista.
+                    aluno_selecionado = alunos_encontrados[escolha - 1] # -1 porque a lista começa em 0
+                    print(f"Aluno '{aluno_selecionado.nome}' selecionado!")
+                    return aluno_selecionado # Retorna o objeto do aluno escolhido
+                else:
+                    print("Opção inválida. Por favor, digite um número da lista.")
+            except ValueError:
+                print("Entrada inválida. Por favor, digite apenas o número.")
+
+    def _editar_informaçoes_aluno(self, aluno):
+        pass
