@@ -85,9 +85,11 @@ class Aluno(Pessoa):
                 print(f"O(A) aluno(a) {self.nome} foi matriculado(a) com sucesso e a sua matrícula é {matricula_gerada} !!")
             return matricula_gerada        
         
+        
     def _inscrever_aluno_em_oficina(self, aluno_a_inscrever, oficina_alvo):
 
         confirmacao = input(f"Confirma a inscrição de {aluno_a_inscrever.nome} na oficina {oficina_alvo.nome} [S/N]?").strip().lower()
+
         if confirmacao == 'n':
             return f"Inscrição cancelada !!"
         
@@ -120,3 +122,22 @@ class Aluno(Pessoa):
                 print("Digite uma opção válida (S/N)")
                 return Aluno._remover_aluno_da_oficina(self, aluno_a_remover, oficina_alvo)
             
+    def _buscar_aluno(self):
+        
+        print("=" * 45)
+        termo = input("PESQUISAR ALUNO: ")
+        alunos_encontrados = []
+
+        for aluno in self.lista_de_alunos:
+            if termo in aluno.nome:
+                alunos_encontrados.append(aluno)
+            elif termo in aluno.cpf:
+                alunos_encontrados.append(aluno)
+            elif termo in aluno.email:
+                alunos_encontrados.append(aluno)
+            elif termo in aluno.matricula:
+                alunos_encontrados.append(aluno)
+
+        for aluno in enumerate(alunos_encontrados, 1):
+            print(aluno)
+            print("\n")
