@@ -68,6 +68,7 @@ class Oficina:
 
         else:
             print(f"Professor {professor_nome} já está associado à oficina {self.__nome}.")
+            
 #----------------------------------------------------------------------------------------------#
 
     def __str__(self):
@@ -89,8 +90,8 @@ class Oficina:
             "professores_associados": self.__professores_associados        
         }
     
+    
     @classmethod
-
     def from_dict(cls, data):
         oficina = cls(
             data["nome"],
@@ -101,3 +102,15 @@ class Oficina:
         oficina.__professores_associados = data.get("professores_associados", [])
         return oficina
 #----------------------------------------------------------------------------------------------#
+
+
+
+
+
+
+
+
+
+
+
+
