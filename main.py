@@ -1,11 +1,10 @@
-"""
-import modelos/pessoa.py
-import modelos/usuario.py
-import modelos/aluno.py
-import modelos/professor.py
-import modelos/oficina.py
+from modelos.pessoa import Pessoa
+from modelos.usuario import Usuario
+from modelos.professor import Professor
+from modelos.aluno import Aluno
+from modelos.oficina import Oficina
+import json
 import os
-"""
 
 
 def captura_input_menu(max_opcao):
