@@ -68,6 +68,7 @@ class Oficina:
 
         else:
             print(f"Professor {professor_nome} já está associado à oficina {self.__nome}.")
+            
 #----------------------------------------------------------------------------------------------#
 
     def __str__(self):
