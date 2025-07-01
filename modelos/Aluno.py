@@ -151,17 +151,17 @@ class Aluno(Pessoa):
 
         print("-" * 45)
         termo = input("PESQUISAR ALUNO (por nome, cpf, email, etc): ").lower() # .lower() para busca insensível
-        print("-" * 45)
         
         if not termo:
             print("Termo de pesquisa não pode ser vazio.")
             return None
 
         alunos_encontrados = []
+
         for aluno in self.lista_de_alunos:
             # Convertemos todos os campos para minúsculas para a comparação
             if (termo in aluno.nome.lower() or
-                termo in str(aluno.matricula).lower() or
+                termo in aluno.matricula.lower() or
                 termo in aluno.cpf.lower() or
                 termo in aluno.email.lower()):
                 alunos_encontrados.append(aluno)
@@ -180,7 +180,7 @@ class Aluno(Pessoa):
         # CASO 3: Vários alunos encontrados, pedir para o utilizador escolher
         print("Vários alunos encontrados. Por favor, escolha um:")
         for indice, aluno in enumerate(alunos_encontrados, 1):
-            print(f"{indice}. {aluno}") # Saída formatada: "1. [Matrícula: 101] ..."
+            print(f"{indice}. {aluno}") 
 
         # Loop para garantir que o utilizador escolha uma opção válida
         while True:
