@@ -19,6 +19,21 @@ def captura_input_menu(max_opcao):
         except ValueError:
             print("Entrada inválida. Por favor, digite um número.")
 
+def login():
+    print(" \n --- Sistema de Gestão de Oficinas ---")
+    print("\n --- Entrar ---")
+    input("")
+    input("")
+
+
+
+
+
+
+
+
+
+
 def menuOpcoes():
     print(" \n --- Sistema de Gestão de Oficinas ---")
     print("\n1. Cadastrar Professor")
@@ -33,8 +48,8 @@ def menuOpcoes():
     print("\n10. Ver Oficinas de um Professor")
     print("\n11. Ver Alunos Inscritos em uma Oficina")
     print("\n12. Ver Frequência de um Aluno em uma Oficina")
-    print("\n13. Registrar dúvida")
-    print("\n14. Dúvidas frequentes")
+    print("\n13. FAQ - Dúvidas")
+    print("\n14. FAQ - Responder FAQ")
     print("\n0. Sair")
     print("="*22)
     return captura_input_menu(14)
@@ -73,11 +88,11 @@ if __name__ == "__main__":
 
         elif opcao_digitada == 8:
             os.system("cls")
-            listar_professores()
+            listar_alunos()
 
         elif opcao_digitada == 9:
             os.system("cls")
-            Professor.listar_oficinas()
+            
 
         elif opcao_digitada == 10:
             os.system("cls")
@@ -97,8 +112,7 @@ if __name__ == "__main__":
 
         elif opcao_digitada == 14:
             os.system("cls")
-            duvidas_frequentes()
-
+            add_resposta()
 
         elif opcao_digitada == 0:
             os.system("cls")
