@@ -1,110 +1,107 @@
-
-import os
-
-#oficiana
-
+#oficina
 # modelos/oficina.py
+ 
 
 class Oficina:
-    """
-    Classe para representar uma oficina oferecida.
-    """
+    
+
     def __init__(self, nome, descricao, capacidade_maxima):
-        """
-        Inicializa uma nova instância de Oficina.
-        Args:
-            nome (str): O nome da oficina.
-            descricao (str): Uma breve descrição da oficina.
-            capacidade_maxima (int): O número máximo de alunos que a oficina pode ter.
-        """
-        self.nome = nome
-        self.descricao = descricao
-        self.capacidade_maxima = capacidade_maxima
-
-
         if not nome or not descricao or capacidade_maxima <= 0:
             raise ValueError("Nome, descrição e capacidade_maxima (maior que zero) são obrigatórios.")
-            
+
         self.__nome = nome
         self.__descricao = descricao
         self.__capacidade_maxima = capacidade_maxima
-        self.__alunos_inscritos = [] # Lista de alunos inscritos nesta oficina
-        self.__professores_associados = [] # Lista de professores que ministram esta oficina
+        self.__alunos_inscritos = []
+        self.__professores_associados = []
 
+#Retorna o nome das funções 
     def get_nome(self):
-        """Retorna o nome da oficina."""
-        
         return self.__nome
 
     def get_descricao(self):
-        """Retorna a descrição da oficina."""
         return self.__descricao
 
     def get_capacidade_maxima(self):
-        """Retorna a capacidade máxima de alunos da oficina."""
         return self.__capacidade_maxima
 
     def get_alunos_inscritos(self):
-        """Retorna a lista de alunos inscritos na oficina."""
         return self.__alunos_inscritos
 
     def get_professores_associados(self):
-        """Retorna a lista de professores associados à oficina."""
         return self.__professores_associados
 
-    def adicionar_aluno(self, aluno):
-        """
-        Adiciona um aluno à oficina, se houver capacidade.
-        Args:
-            aluno (Aluno): O objeto Aluno a ser adicionado.
-        Returns:
-            bool: True se o aluno foi adicionado, False caso contrário.
-        """
+#Assoacia o aluno a Oficina
+    def adicionar_aluno(self, aluno_nome):
+
         if len(self.__alunos_inscritos) < self.__capacidade_maxima:
-            if aluno not in self.__alunos_inscritos:
-                self.__alunos_inscritos.append(aluno)
-                print(f"Aluno {aluno.get_nome()} inscrito na oficina {self.get_nome()}.")
+
+            if aluno_nome not in self.__alunos_inscritos:
+                self.__alunos_inscritos.append(aluno_nome)
+                print(f"Aluno {aluno_nome} inscrito na oficina {self.__nome}.")
                 return True
+            
             else:
-                print(f"Aluno {aluno.get_nome()} já está inscrito na oficina {self.get_nome()}.")
-                return False
-        else:
-            print(f"Oficina {self.get_nome()} está cheia. Não é possível adicionar mais alunos.")
-            return False
+                print(f"Aluno {aluno_nome} já está inscrito na oficina {self.__nome}.")
 
-    def remover_aluno(self, aluno):
-        """
-        Remove um aluno da oficina.
-        Args:
-            aluno (Aluno): O objeto Aluno a ser removido.
-        Returns:
-            bool: True se o aluno foi removido, False caso contrário.
-        """
-        if aluno in self.__alunos_inscritos:
-            self.__alunos_inscritos.remove(aluno)
-            print(f"Aluno {aluno.get_nome()} removido da oficina {self.get_nome()}.")
+        else:
+            print(f"Oficina {self.__nome} está cheia. Não é possível adicionar mais alunos.")
+        return False
+
+ #Remove o aluno
+    def remover_aluno(self, aluno_nome):
+
+        if aluno_nome in self.__alunos_inscritos:
+            self.__alunos_inscritos.remove(aluno_nome)
+            print(f"Aluno {aluno_nome} removido da oficina {self.__nome}.")
             return True
+        
         else:
-            print(f"Aluno {aluno.get_nome()} não está inscrito na oficina {self.get_nome()}.")
+            print(f"Aluno {aluno_nome} não está inscrito na oficina {self.__nome}.")
             return False
 
-    def associar_professor(self, professor):
-        """
-        Associa um professor a esta oficina.
-        Args:
-            professor (Professor): O objeto Professor a ser associado.
-        """
-        if professor not in self.__professores_associados:
-            self.__professores_associados.append(professor)
-            print(f"Professor {professor.get_nome()} associado à oficina {self.get_nome()}.")
+#Associa o professor a oficina  
+    def associar_professor(self, professor_nome):
+        if professor_nome not in self.__professores_associados:
+            self.__professores_associados.append(professor_nome)
+            print(f"Professor {professor_nome} associado à oficina {self.__nome}.")
+
         else:
-            print(f"Professor {professor.get_nome()} já está associado à oficina {self.get_nome()}.")
+            print(f"Professor {professor_nome} já está associado à oficina {self.__nome}.")
+            
+#----------------------------------------------------------------------------------------------#
 
     def __str__(self):
-        """
-        Retorna uma representação em string da Oficina.
-        """
-        return f"Oficina: {self.get_nome()} (Capacidade: {len(self.get_alunos_inscritos())}/{self.get_capacidade_maxima()})"
+        return (
+            f"Oficina: {self.__nome}\n"
+            f"Descrição: {self.__descricao}\n"
+            f"Capacidade: {len(self.__alunos_inscritos)}/{self.__capacidade_maxima}\n"
+            f"Alunos: {', '.join(self.__alunos_inscritos)}\n"
+            f"Professores: {', '.join(self.__professores_associados)}"
+        )
+
+
+    def to_dict(self):
+        return {
+            "nome": self.__nome,
+            "descricao": self.__descricao,
+            "capacidade_maxima": self.__capacidade_maxima,
+            "alunos_inscritos": self.__alunos_inscritos,
+            "professores_associados": self.__professores_associados        
+        }
+    
+    
+    @classmethod
+    def from_dict(cls, data):
+        oficina = cls(
+            data["nome"],
+            data["descricao"],
+            data["capacidade_maxima"]
+        )
+        oficina.__alunos_inscritos = data.get("alunos_inscritos", [])
+        oficina.__professores_associados = data.get("professores_associados", [])
+        return oficina
+#----------------------------------------------------------------------------------------------#
 
 
 
