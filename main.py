@@ -1,11 +1,10 @@
-"""
-import modelos/pessoa.py
-import modelos/usuario.py
-import modelos/aluno.py
-import modelos/professor.py
-import modelos/oficina.py
+from modelos.pessoa import Pessoa
+from modelos.usuario import Usuario
+from modelos.professor import Professor
+from modelos.aluno import Aluno
+from modelos.oficina import Oficina
+import json
 import os
-"""
 
 
 def captura_input_menu(max_opcao):
@@ -34,9 +33,11 @@ def menuOpcoes():
     print("\n10. Ver Oficinas de um Professor")
     print("\n11. Ver Alunos Inscritos em uma Oficina")
     print("\n12. Ver Frequência de um Aluno em uma Oficina")
+    print("\n13. Registrar dúvida")
+    print("\n14. Dúvidas frequentes")
     print("\n0. Sair")
     print("="*22)
-    return captura_input_menu(12)
+    return captura_input_menu(14)
 
 if __name__ == "__main__":
     while True:
@@ -52,15 +53,15 @@ if __name__ == "__main__":
 
         elif opcao_digitada == 3:
             os.system("cls")
-            criar_oficina()
+            cadastrar_oficina()
 
         elif opcao_digitada == 4:
             os.system("cls")
-            inscrever_aluno_em_oficina()
+            Oficina.adicionar_aluno()
 
         elif opcao_digitada == 5:
             os.system("cls")
-            associar_professor_a_oficina()
+            Oficina.associar_professor()
 
         elif opcao_digitada == 6:
             os.system("cls")
@@ -76,7 +77,7 @@ if __name__ == "__main__":
 
         elif opcao_digitada == 9:
             os.system("cls")
-            listar_oficinas()
+            Professor.listar_oficinas()
 
         elif opcao_digitada == 10:
             os.system("cls")
@@ -84,11 +85,20 @@ if __name__ == "__main__":
 
         elif opcao_digitada == 11:
             os.system("cls")
-            ver_alunos_inscritos_oficina()
+            Oficina.get_alunos_inscritos()
 
         elif opcao_digitada == 12:
             os.system("cls")
-            ver_alunos_inscritos_oficina()
+            ver_alunos_frequencia_oficina()
+
+        elif opcao_digitada == 13:
+            os.system("cls")
+            add_duvida()
+
+        elif opcao_digitada == 14:
+            os.system("cls")
+            duvidas_frequentes()
+
 
         elif opcao_digitada == 0:
             os.system("cls")
