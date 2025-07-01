@@ -22,27 +22,20 @@ class Professor(Usuario):
             raise ValueError("Nova especialidade não pode estar vazia.")
         self._especialidade = nova_especialidade
 
-<<<<<<< Updated upstream
-    # Métodos relacionados a oficinas
-    def adicionar_oficina(self, oficina):
-=======
 
 #métodos relacionados a oficinas 
         
     def adicionar_oficina_professor(self,oficina):
->>>>>>> Stashed changes
+
         if oficina not in self._oficinas:
             self._oficinas.append(oficina)
             if hasattr(oficina, "associar_professor"):
                 oficina.associar_professor(self)
 
-<<<<<<< Updated upstream
-    def listar_oficinas(self):
-        return self._oficinas.copy()  # boa prática: evitar exposição direta da lista interna
-=======
+
+  
     def listar_oficinas_professor(self):
         return self.__oficinas
->>>>>>> Stashed changes
 
     # Representação do professor
     def __str__(self):
