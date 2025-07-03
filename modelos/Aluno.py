@@ -197,5 +197,6 @@ class Aluno(Pessoa):
             except ValueError:
                 print("Entrada inválida. Por favor, digite apenas o número.")
 
-    def _editar_informacoes_aluno(self, aluno):
+    def _editar_informacoes_aluno(self, aluno): 
+        
         pass
