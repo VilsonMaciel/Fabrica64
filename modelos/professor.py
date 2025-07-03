@@ -1,5 +1,7 @@
 from .usuario import Usuario
 from .tipo_usuario import TipoUsuario
+import json
+from datetime import datetime, date
 
 class Professor(Usuario):
     def __init__(self, nome, cpf, email, data_nasc, telefone, genero, senha, especialidade):
@@ -10,6 +12,7 @@ class Professor(Usuario):
         
         self._especialidade = especialidade
         self._oficinas = []
+        self._frequencia_file = "frequencia.json" #arquivo para adicionar frequencia
 
     # Getter e Setter usando @property
     @property
@@ -36,6 +39,11 @@ class Professor(Usuario):
   
     def listar_oficinas_professor(self):
         return self.__oficinas
+    
+    #metodos relacionados a frequencia dos alunos
+
+    def registrar_frequencia_aluno(self,): #registra a frequencia de uma aluno
+    
 
     # Representação do professor
     def __str__(self):
