@@ -89,7 +89,6 @@ if __name__ == "__main__":
     while True:
         os.system("cls")
     
-        opcao_digitada = menuOpcoes()
         opcao_digitada = menu_publico()
         
 
