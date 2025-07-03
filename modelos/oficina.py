@@ -1,6 +1,6 @@
 #oficina
 # modelos/oficina.py
- 
+import json
 
 class Oficina:
     
@@ -14,6 +14,7 @@ class Oficina:
         self.__capacidade_maxima = capacidade_maxima
         self.__alunos_inscritos = []
         self.__professores_associados = []
+        
 
 #Retorna o nome das funções 
     def get_nome(self):
@@ -68,6 +69,9 @@ class Oficina:
 
         else:
             print(f"Professor {professor_nome} já está associado à oficina {self.__nome}.")
+
+#Cadastrar Oficina
+
             
 #----------------------------------------------------------------------------------------------#
 
