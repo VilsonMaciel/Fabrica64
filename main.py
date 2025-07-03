@@ -90,6 +90,7 @@ if __name__ == "__main__":
         os.system("cls")
     
         opcao_digitada = menuOpcoes()
+        opcao_digitada = menu_publico()
         
 
         if usuario_logado is None:
