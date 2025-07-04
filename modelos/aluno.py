@@ -95,6 +95,7 @@ class Aluno(Pessoa):
         elif confirmacao == 's':
             aluno_a_inscrever._oficinas_inscritas.append(oficina_alvo)
             oficina_alvo._alunos_inscritos.append(aluno_a_inscrever)
+            self.salvar_arquivo_alunos()
             return f"Inscrição do(a) Aluno(a) {aluno_a_inscrever.nome} inscrito com sucesso"
                
         else:
@@ -150,7 +151,7 @@ class Aluno(Pessoa):
     def _pesquisar_e_selecionar_aluno(self):
 
         print("-" * 45)
-        termo = input("PESQUISAR ALUNO (por nome, cpf, email, etc): ").lower() # .lower() para busca insensível
+        termo = input("PESQUISAR ALUNO (por nome, cpf, email, etc): ").lower() 
         
         if not termo:
             print("Termo de pesquisa não pode ser vazio.")
@@ -198,6 +199,6 @@ class Aluno(Pessoa):
                 print("Entrada inválida. Por favor, digite apenas o número.")
 
     def _editar_informacoes_aluno(self, aluno): 
-        
-        pass
-    
+
+        aluno_escolhido = self._pesquisar_e_selecionar_aluno()
+
