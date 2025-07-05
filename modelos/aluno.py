@@ -1,9 +1,9 @@
-from pessoa import Pessoa
-from oficina import Oficina
 import json
 import datetime
 import random
-from os import system
+import os
+from pessoa import Pessoa
+from oficina import Oficina
 
 class Aluno(Pessoa):
     _matriculas_usadas = set() # Set é um conjunto de dados que não é possível repetir elementos
@@ -12,7 +12,6 @@ class Aluno(Pessoa):
         super().__init__(nome, cpf, email, data_nasc, telefone, genero)
         self._matricula = self._gerar_matricula()
         self._oficinas_inscritas = []
-        self._frequencia = {}
 
     def __str__(self):
         """Função para exibir as informações do aluno"""
@@ -39,11 +38,6 @@ class Aluno(Pessoa):
         """GETTER para as oficinas que o aluno está inscrito."""
         return self._oficinas_inscritas
     
-    @property
-    def frequencia(self):
-        """GETTER para frequencia"""
-        return self._frequencia
-    
     #Função para importar alunos do arquivo Alunos.json
     def importando_arquivo_alunos(self):
         try:
@@ -53,10 +47,9 @@ class Aluno(Pessoa):
                 aluno_obj = Aluno(dados_alunos['nome'], dados_alunos['cpf'], dados_alunos['email'], dados_alunos['data_nasc'],
                                   dados_alunos['telefone'], dados_alunos['genero'], dados_alunos['matricula'])
                 aluno_obj.oficinas_inscritas = dados_alunos.get('oficinas_inscritas', [])
-                aluno_obj.frequencia = dados_alunos.get('frequencia', {})  
                 self.lista_de_alunos.append(aluno_obj) #Extraindo as informações que existem em forma de dicionário no arquivo .json e os convertando para Objetos Alunos.
 
-        except FileNotFoundError:
+        except (FileNotFoundError, json.JSONDecodeError):
             self.lista_de_alunos = []
 
     ####### Função para salvar os alunos no arquivo .json ATENÇÃO, DEVE SER CHAMADA SEMPRE QUE HOUVER ALTERAÇÃO NA LISTA DE ALUNOS!!!!!!! ########        
@@ -70,7 +63,7 @@ class Aluno(Pessoa):
         with open("Aluno.json", 'w', encoding='utf-8') as arquivo:
             json.dump(dados, arquivo, indent= 4)
 
-
+    @classmethod
     #Função para gerar matrículas aleatórias iniciando pelo ano atual.
     def _gerar_matricula(self):
         ano_atual = datetime.date.today().year #Capturando o ano atual
@@ -198,7 +191,55 @@ class Aluno(Pessoa):
             except ValueError:
                 print("Entrada inválida. Por favor, digite apenas o número.")
 
-    def _editar_informacoes_aluno(self, aluno): 
+    def cadastrar_aluno(self):
+        ##Ju precisa mudar os nomes das variáveis, tirar os dois underscores##
 
-        aluno_escolhido = self._pesquisar_e_selecionar_aluno()
+        os.system('cls' if os.name == "nt" else 'clear')
+
+        while True:
+            nome = Pessoa.chamar_nome()
+            while True:
+                cpf = Pessoa.chamar_cpf()
+                if any(aluno.cpf == cpf for aluno in self.lista_de_alunos):
+                    print("ERRO: Já existe um aluno com este cpf, tente novamente")
+                else:
+                    break
+
+            email = Pessoa.chamar_email()
+            dt_nasc = Pessoa.chamar_data_nasc()
+            telefone = Pessoa.chamar_telefone()
+            genero = Pessoa.chamar_genero()
+
+            confirm = input(f"Confirma a inscrição do aluno(a):"
+                            f"Nome = {nome}"
+                            f"CPF: {cpf}"
+                            f"Email: {email}"
+                            f"Telefone: {telefone}"
+                            f"Data de Nascimento: {dt_nasc}"
+                            f"Gênero: {genero}\n"
+                            f"Pressione enter para continuar ou 0 para cancelar")
+            
+            if confirm == '0': 
+                print("Cadastro cancelado pelo utilizador...")
+                continue
+            else:
+                try:
+                    os.system('cls' if os.name == "nt" else 'clear')
+                    novo_aluno = Aluno(nome, cpf, email, dt_nasc, telefone, genero)
+                    self.lista_de_alunos.append(novo_aluno)
+                    self.salvar_arquivo_alunos()
+                    print("Aluno criado com sucesso")
+                    print(novo_aluno)
+
+                except ValueError as e:
+                    print(f"ERRO inesperado ao criar o aluno: {e}")
+
+            #Perguntando se o utilizador quer criar outro aluno
+            continuar = input("\nDeseja cadastrar outro aluno? (S/N): ").strip().lower()
+            if continuar != 's':
+                print("\nEncerrando o módulo de cadastro...")
+                break 
+
+
+
 
