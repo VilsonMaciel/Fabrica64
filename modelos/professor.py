@@ -2,8 +2,6 @@ import json
 import os
 from .usuario import Usuario
 from .tipo_usuario import TipoUsuario
-import json
-from datetime import datetime, date
 
 caminho_arquivo = "professores.json"
 
@@ -16,7 +14,6 @@ class Professor(Usuario):
         
         self._especialidade = especialidade
         self._oficinas = []
-        self._frequencia_file = "frequencia.json" #arquivo para adicionar frequencia
 
     # Getter e Setter usando @property
     @property
@@ -37,14 +34,6 @@ class Professor(Usuario):
                 oficina.associar_professor(self)
 
     def listar_oficinas_professor(self):
-<<<<<<< HEAD
-        return self.__oficinas
-    
-    #metodos relacionados a frequencia dos alunos
-
-    def registrar_frequencia_aluno(self,): #registra a frequencia de uma aluno
-    
-=======
         return self._oficinas
 
     # Salvar/cadastrar professor no JSON
@@ -72,7 +61,6 @@ class Professor(Usuario):
 
         with open(caminho_arquivo, "w", encoding="utf-8") as file:
             json.dump(professores, file, indent=4, ensure_ascii=False)
->>>>>>> Develop
 
     # Representação do professor
     def __str__(self):
