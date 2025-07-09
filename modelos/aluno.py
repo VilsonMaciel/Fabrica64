@@ -217,7 +217,7 @@ class Aluno(Pessoa):
                             f"Telefone: {telefone}"
                             f"Data de Nascimento: {dt_nasc}"
                             f"Gênero: {genero}\n"
-                            f"Pressione enter para continuar ou 0 para cancelar")
+                            f"Pressione ENTER para continuar ou 0 para cancelar")
             
             if confirm == '0': 
                 print("Cadastro cancelado pelo utilizador...")
