@@ -7,6 +7,7 @@ import os
 
 class Aluno(Pessoa):
     _matriculas_usadas = set() # Set é um conjunto de dados que não é possível repetir elementos
+    lista_de_alunos = []
 
     def __init__(self, nome, cpf, email, data_nasc, telefone, genero):
         super().__init__(nome, cpf, email, data_nasc, telefone, genero)
@@ -304,8 +305,4 @@ class Aluno(Pessoa):
             # quando a função terminar.
             print("\nOperação cancelada. As alterações não foram salvas.")
 
-<<<<<<< Updated upstream
         input("Pressione Enter para continuar...")
-=======
-        input("Pressione Enter para continuar...")
->>>>>>> Stashed changes
