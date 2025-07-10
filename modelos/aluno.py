@@ -47,9 +47,14 @@ class Aluno(Pessoa):
             with open("Alunos.json", 'r', encoding='uft-8') as arquivo: #Abrindo o arquivo "Alunos.json" como "arquivo" dentro do meu código
                 dados = json.load(arquivo) #Carregando os dados do meu arquivo que chamei de "arquivo"
             for dados_alunos in dados:
+                # 1 - Primeiro criaremos os objetos com os parâmetros que devem sem passados na inicizalização
                 aluno_obj = Aluno(dados_alunos['nome'], dados_alunos['cpf'], dados_alunos['email'], dados_alunos['data_nasc'],
-                                  dados_alunos['telefone'], dados_alunos['genero'], dados_alunos['matricula'])
-                aluno_obj.oficinas_inscritas = dados_alunos.get('oficinas_inscritas', [])
+                                  dados_alunos['telefone'], dados_alunos['genero'])
+                # 2 - AGORA, com o objeto criado, pegamos o valor do arquivo json para matrícula e atribuiremos ao aluno, em seguida colocamos a matrícula na lista de matrículas usadas.
+                aluno_obj._matricula = dados_alunos['matricula']
+                Aluno._matriculas_usadas.add(aluno_obj.matricula)
+                # 3 - Fazemos o mesmo para as oficinas inscritas.
+                aluno_obj._oficinas_inscritas = dados_alunos.get('oficinas_inscritas', [])
                 cls.lista_de_alunos.append(aluno_obj) #Extraindo as informações que existem em forma de dicionário no arquivo .json e os convertando para Objetos Alunos.
 
         except FileNotFoundError:
@@ -67,7 +72,7 @@ class Aluno(Pessoa):
         with open("Alunos.json", 'w', encoding='utf-8') as arquivo:
             json.dump(dados, arquivo, indent= 4)
 
-    @classmethod
+
     #Função para gerar matrículas aleatórias iniciando pelo ano atual.
     def _gerar_matricula(self):
         ano_atual = datetime.date.today().year #Capturando o ano atual
