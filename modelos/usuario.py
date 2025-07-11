@@ -47,10 +47,13 @@ class Usuario(Pessoa):
         self.__senha = nova_senha
     
     def __str__(self):
-<<<<<<< HEAD
+
         return # to do: Texto de apresentação 
-=======
+
         login_info = f"Email: {self.__login['email']}, CPF: {self.__login['CPF']}"
         return f"Usuário: {login_info}, {super().__str__()}" # to do: Texto de apresentação 
- 
->>>>>>> 37b1e174a0038a4d25dffa60b8ac66d198d999e0
+
+
+        login_info = f"Email: {self.__login['email']}, CPF: {self.__login['CPF']}"
+        return f"Usuário: {login_info}, {super().__str__()}" # to do: Texto de apresentação 
+

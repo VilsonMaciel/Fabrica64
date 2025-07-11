@@ -1,13 +1,14 @@
 from .usuario import Usuario
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-=======
+
 
 class professor:
->>>>>>> Stashed changes
-=======
+
+
 from .tipo_usuario import TipoUsuario
->>>>>>> 37b1e174a0038a4d25dffa60b8ac66d198d999e0
+
+
+from .tipo_usuario import TipoUsuario
+
 
 class Professor(Usuario):
     def __init__(self, nome, cpf, email, data_nasc, telefone, genero, senha, especialidade):
