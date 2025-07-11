@@ -3,16 +3,16 @@ from oficina import Oficina
 import json
 import datetime
 import random
-from os import system
+import os
 
 class Aluno(Pessoa):
     _matriculas_usadas = set() # Set é um conjunto de dados que não é possível repetir elementos
+    lista_de_alunos = []
 
     def __init__(self, nome, cpf, email, data_nasc, telefone, genero):
         super().__init__(nome, cpf, email, data_nasc, telefone, genero)
         self._matricula = self._gerar_matricula()
         self._oficinas_inscritas = []
-        self._frequencia = {}
 
     def __str__(self):
         """Função para exibir as informações do aluno"""
@@ -35,39 +35,41 @@ class Aluno(Pessoa):
         return self._matricula
     
     @property
-    def oficinas_inscrias(self):
+    def oficinas_inscritas(self):
         """GETTER para as oficinas que o aluno está inscrito."""
         return self._oficinas_inscritas
     
-    @property
-    def frequencia(self):
-        """GETTER para frequencia"""
-        return self._frequencia
     
     #Função para importar alunos do arquivo Alunos.json
-    def importando_arquivo_alunos(self):
+    @classmethod
+    def importando_arquivo_alunos(cls):
         try:
             with open("Alunos.json", 'r', encoding='uft-8') as arquivo: #Abrindo o arquivo "Alunos.json" como "arquivo" dentro do meu código
                 dados = json.load(arquivo) #Carregando os dados do meu arquivo que chamei de "arquivo"
             for dados_alunos in dados:
+                # 1 - Primeiro criaremos os objetos com os parâmetros que devem sem passados na inicizalização
                 aluno_obj = Aluno(dados_alunos['nome'], dados_alunos['cpf'], dados_alunos['email'], dados_alunos['data_nasc'],
-                                  dados_alunos['telefone'], dados_alunos['genero'], dados_alunos['matricula'])
-                aluno_obj.oficinas_inscritas = dados_alunos.get('oficinas_inscritas', [])
-                aluno_obj.frequencia = dados_alunos.get('frequencia', {})  
-                self.lista_de_alunos.append(aluno_obj) #Extraindo as informações que existem em forma de dicionário no arquivo .json e os convertando para Objetos Alunos.
+                                  dados_alunos['telefone'], dados_alunos['genero'])
+                # 2 - AGORA, com o objeto criado, pegamos o valor do arquivo json para matrícula e atribuiremos ao aluno, em seguida colocamos a matrícula na lista de matrículas usadas.
+                aluno_obj._matricula = dados_alunos['matricula']
+                Aluno._matriculas_usadas.add(aluno_obj.matricula)
+                # 3 - Fazemos o mesmo para as oficinas inscritas.
+                aluno_obj._oficinas_inscritas = dados_alunos.get('oficinas_inscritas', [])
+                cls.lista_de_alunos.append(aluno_obj) #Extraindo as informações que existem em forma de dicionário no arquivo .json e os convertando para Objetos Alunos.
 
         except FileNotFoundError:
-            self.lista_de_alunos = []
+            cls.lista_de_alunos = []
 
-    ####### Função para salvar os alunos no arquivo .json ATENÇÃO, DEVE SER CHAMADA SEMPRE QUE HOUVER ALTERAÇÃO NA LISTA DE ALUNOS!!!!!!! ########        
-    def salvar_arquivo_alunos(self):
+    ####### Função para salvar os alunos no arquivo .json ATENÇÃO, DEVE SER CHAMADA SEMPRE QUE HOUVER ALTERAÇÃO NA LISTA DE ALUNOS!!!!!!! ########      
+    @classmethod  
+    def salvar_arquivo_alunos(cls):
 
         dados = [{"nome": aluno.nome, "cpf": aluno.cpf, "email": aluno.email, 
                   "data_nasc": aluno.data_nasc, "telefone": aluno.telefone, "genero": aluno.genero,
-                  "matricula": aluno.matricula, "oficinas_inscritas": aluno.oficinas_inscritas, "frequencia": aluno.frequencia}
-                    for aluno in self.lista_de_alunos]
+                  "matricula": aluno.matricula, "oficinas_inscritas": aluno.oficinas_inscritas}
+                    for aluno in cls.lista_de_alunos]
         
-        with open("Aluno.json", 'w', encoding='utf-8') as arquivo:
+        with open("Alunos.json", 'w', encoding='utf-8') as arquivo:
             json.dump(dados, arquivo, indent= 4)
 
 
@@ -80,48 +82,55 @@ class Aluno(Pessoa):
             matricula_gerada =  str(f"{ano_atual}.{numero_aleatorio}") #Juntando os ano atual e o número aleatório para gerar uma matrícula do tipo "AAAA.XXXXXX"
 
             if matricula_gerada not in self._matriculas_usadas: #Verificando se a matrícula atual já existe.
-                self._matriculas_usadas.add(matricula_gerada)
+                Aluno._matriculas_usadas.add(matricula_gerada)
                 print(f"O(A) aluno(a) {self.nome} foi matriculado(a) com sucesso e a sua matrícula é {matricula_gerada} !!")
             return matricula_gerada        
         
-        
-    def _inscrever_aluno_em_oficina(self, aluno_a_inscrever, oficina_alvo):
+    @classmethod
+    def _inscrever_aluno_em_oficina(cls, aluno_a_inscrever, oficina_alvo):
 
-        confirmacao = input(f"Confirma a inscrição de {aluno_a_inscrever.nome} na oficina {oficina_alvo.nome} [S/N]?").strip().lower()
+        while True:
+            confirmacao = input(f"Confirma a inscrição de {aluno_a_inscrever.nome} na oficina {oficina_alvo.nome} [S/N]?").strip().lower()
 
-        if confirmacao == 'n':
-            return f"Inscrição cancelada !!"
-        
-        elif confirmacao == 's':
-            aluno_a_inscrever._oficinas_inscritas.append(oficina_alvo)
-            oficina_alvo._alunos_inscritos.append(aluno_a_inscrever)
-            return f"Inscrição do(a) Aluno(a) {aluno_a_inscrever.nome} inscrito com sucesso"
-               
-        else:
-            print("Digite uma opção válida [S/N]")
-            return Aluno._inscrever_aluno_em_oficina(self, aluno_a_inscrever, oficina_alvo)
+            if confirmacao == 'n':
+                print(f"Inscrição cancelada !!")
+                break
 
-        
-    def _remover_aluno_da_oficina(self, aluno_a_remover, oficina_alvo):
+            elif confirmacao == 's':
+                aluno_a_inscrever._oficinas_inscritas.append(oficina_alvo)
+                oficina_alvo._alunos_inscritos.append(aluno_a_inscrever)
+                print(f"Inscrição do(a) Aluno(a) {aluno_a_inscrever.nome} inscrito com sucesso")
+                cls.salvar_arquivo_alunos()
+                break
+                
+            else:
+                print("Digite uma opção válida [S/N]")
+
+
+    @classmethod
+    def _remover_aluno_da_oficina(cls, aluno_a_remover, oficina_alvo):
         
         if aluno_a_remover not in oficina_alvo._alunos_inscritos:
             return f"O aluno {aluno_a_remover.nome} não está matriculado nesta oficina"
         
-        else:    
-            confirmacao = input(f"Confirma a remoção de {aluno_a_remover.nome} da oficina {oficina_alvo.nome} [S/N]").strip().lower()
+        else:
+            while True:
+                confirmacao = input(f"Confirma a remoção de {aluno_a_remover.nome} da oficina {oficina_alvo.nome} [S/N]").strip().lower()
 
-            if confirmacao == 'n':
-                return f"Remoção cancelada"
-            
-            elif confirmacao == 's':
-                oficina_alvo._alunos_inscritos.remove(aluno_a_remover)
-                print(f"Remoção do aluno {aluno_a_remover.nome} da oficina {oficina_alvo.nome} concluída com sucesso!! ")
+                if confirmacao == 'n':
+                    print(f"Remoção cancelada")
+                    break
+                
+                elif confirmacao == 's':
+                    oficina_alvo._alunos_inscritos.remove(aluno_a_remover)
+                    print(f"Remoção do aluno {aluno_a_remover.nome} da oficina {oficina_alvo.nome} concluída com sucesso!! ")
+                    cls.salvar_arquivo_alunos()
+                    break
 
-            else:
-                print("Digite uma opção válida (S/N)")
-                return Aluno._remover_aluno_da_oficina(self, aluno_a_remover, oficina_alvo)
-            
-    def _pesquisar_alunos(self):
+                else:
+                    print("Digite uma opção válida (S/N)") 
+    @classmethod        
+    def _pesquisar_alunos(cls):
         
         print("-" * 45)
         termo = input("PESQUISAR ALUNO: ")
@@ -131,7 +140,7 @@ class Aluno(Pessoa):
             print("O campo de pesquisa não pode estar vazio!!")
             return None
 
-        for aluno in self.lista_de_alunos:
+        for aluno in cls.lista_de_alunos:
             if (termo in aluno.nome.lower() or
                 termo in aluno.cpf.lower() or
                 termo in aluno.email.lower() or
@@ -146,11 +155,12 @@ class Aluno(Pessoa):
         for aluno in enumerate(alunos_encontrados, 1):
             print(aluno)
             print("-" * 45)
-    
-    def _pesquisar_e_selecionar_aluno(self):
+
+    @classmethod
+    def _pesquisar_e_selecionar_aluno(cls):
 
         print("-" * 45)
-        termo = input("PESQUISAR ALUNO (por nome, cpf, email, etc): ").lower() # .lower() para busca insensível
+        termo = input("PESQUISAR ALUNO (por nome, cpf, email, etc): ").lower() 
         
         if not termo:
             print("Termo de pesquisa não pode ser vazio.")
@@ -158,7 +168,7 @@ class Aluno(Pessoa):
 
         alunos_encontrados = []
 
-        for aluno in self.lista_de_alunos:
+        for aluno in cls.lista_de_alunos:
             # Convertemos todos os campos para minúsculas para a comparação
             if (termo in aluno.nome.lower() or
                 termo in aluno.matricula.lower() or
@@ -197,7 +207,107 @@ class Aluno(Pessoa):
             except ValueError:
                 print("Entrada inválida. Por favor, digite apenas o número.")
 
-    def _editar_informacoes_aluno(self, aluno): 
+    @classmethod
+    def _editar_informacoes_aluno(cls): 
         
-        pass
-    
+        aluno_editar = cls._pesquisar_e_selecionar_aluno() #Capturando o aluno que queremos editar
+
+        if not aluno_editar:
+            print("Nenhum aluno selecionado. Retornando ao menu!!")
+            return
+        
+        os.system('cls' if os.name == 'nt' else 'clear')
+        print(f"==== EDITANDO INFORMAÇÕES DO ALUNO: {aluno_editar.nome} ====")
+        print("\tPressione ENTER para manter a informação atual")
+        print("-" * 50)
+
+        #----- CAMPO NOME -----#
+        while True:
+            try:
+                novo_nome = input(f"Nome atual [{aluno_editar.nome}]: ").strip()
+                if novo_nome: 
+                    aluno_editar.nome = novo_nome # Fazendo a alteração e acionando a validação dentro do setter na classe Pessoa
+                    print(">> Nome atualizado!")
+                break
+            except ValueError as e:
+                print(f"ERRO: {e}")
+
+        #----- CAMPO CPF -----#
+        while True:
+            try:
+                novo_cpf = input(f"CPF atual [{aluno_editar.cpf}]: ").strip()
+                if novo_cpf:
+                    if any(aluno.cpf == novo_cpf and aluno.matricula != aluno_editar.matricula for aluno in cls.lista_de_alunos):
+                        raise ValueError("Este CPF pertence a outro aluno!")
+                    aluno_editar.cpf = novo_cpf
+                    print(">> CPF Atualizado!")
+                break
+            except ValueError as e:
+                print(f"ERRO: {e}")
+
+        #----- CAMPO EMAIL -----#
+        while True:
+            try:
+                novo_email = input(f"Email atual [{aluno_editar.email}]: ").strip()
+                if novo_email:
+                    aluno_editar.email = novo_email
+                    print(">> Email atualizado!")
+                break
+            except ValueError as e:
+                print(f"ERRO: {e}")
+
+        #----- CAMPO DATA DE NASCIMENTO -----#
+        while True:
+            try:
+                novo_data_nasc = input(f"Data de nascimento atual [{aluno_editar.data_nasc}]: ").strip()
+                if novo_data_nasc:
+                    aluno_editar.data_nasc = novo_data_nasc
+                    print(">> Data de nascimento atualizada!")
+                break
+            except ValueError as e:
+                print(f"ERRO: {e}")
+
+        #----- CAMPO TELEFONE -----#
+        while True:
+            try:
+                novo_telefone = input(f"Telefone atual [{aluno_editar.telefone}]: ").strip()
+                if novo_telefone:
+                    aluno_editar.telefone = novo_telefone
+                    print(">> Telefone atualizado!")
+                break
+            except ValueError as e:
+                print(f"ERRO: {e}")
+
+        #----- CAMPO GENERO -----#
+        while True:
+            try:
+                novo_genero = input(f"Email atual [{aluno_editar.genero}]: ").strip()
+                if novo_genero:
+                    aluno_editar.genero = novo_genero
+                    print(">> Gênero atualizado!")
+                break
+            except ValueError as e:
+                print(f"ERRO: {e}")
+
+        print("-" * 50)
+        print("\n--- REVISE AS ALTERAÇÕES ---")
+        
+        # Ao fazer print(aluno_editar), o método __str__ será chamado
+        print(aluno_editar)
+        
+        print("-" * 50)
+        
+        # --- PASSO DE CONFIRMAÇÃO FINAL ---
+        confirmacao = input("Deseja salvar estas alterações? (S/N): ").strip().lower()
+        
+        if confirmacao == 's':
+            # Se o utilizador confirmar, nós gravamos as alterações no ficheiro.
+            cls.salvar_arquivo_alunos()
+            print("\nAlterações salvas com sucesso!")
+        else:
+            # Se o utilizador cancelar, nós não fazemos nada. As alterações
+            # feitas no objeto em memória serão simplesmente descartadas
+            # quando a função terminar.
+            print("\nOperação cancelada. As alterações não foram salvas.")
+
+        input("Pressione Enter para continuar...")
