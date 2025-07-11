@@ -93,7 +93,7 @@ class Oficina:
             "alunos_inscritos": self.__alunos_inscritos,
             "professores_associados": self.__professores_associados
         }
-#---------------------------------------#
+#--------------------------------------#
     
     @classmethod
     def from_dict(cls, data):
