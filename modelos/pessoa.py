@@ -3,12 +3,12 @@ import datetime
 
 class Pessoa:
     def __init__(self, nome, cpf, email, data_nasc, telefone, genero):
-        self.__nome = nome
-        self.__cpf = cpf 
-        self.__email = email
-        self.__data_nasc = data_nasc  #dd/mm/YYYY
-        self.__telefone = telefone 
-        self.__genero = genero  #masculino, feminino, outros.
+        self.nome = nome
+        self.cpf = cpf 
+        self.email = email
+        self.data_nasc = data_nasc  #dd/mm/YYYY
+        self.telefone = telefone 
+        self.genero = genero  #masculino, feminino, outros.
         
     @property
     def nome(self):
