@@ -4,6 +4,7 @@ from modelos.professor import Professor
 from modelos.aluno import Aluno
 from modelos.oficina import Oficina
 from modelos.tipo_usuario import TipoUsuario
+from modelos.frequencia import ControleFrequencia
 import duvidas  
 import json
 import os
@@ -48,34 +49,34 @@ def menu_completo(): #menu pós login
     print(" \n --- Sistema de Gestão de Oficinas ---")
 
     if usuario.tipo_usuario  == TipoUsuario.adm: 
-        print("\n1. Cadastrar Professor")
+        print("\n1. Cadastrar Professores")
         print("\n2. Cadastrar alunos")
-        print("\n3. Criar Oficina")
-        print("\n4. Inscrever Aluno em Oficina")
-        print("\n5. Associar Professor à Oficina")
-        print("\n6. Registrar Frequência de Aluno")
-        print("\n7. Listar Professor")
-        print("\n8. Listar Alunos")
-        print("\n9. Listar Todas as Oficinas")
-        print("\n10. Ver Oficinas de um Professor")
-        print("\n11. Ver Alunos Inscritos em uma Oficina")
-        print("\n12. Ver Frequência de um Aluno em uma Oficina")
-        print("\n13. FAQ - Dúvidas")
-        print("\n14. FAQ - Responder FAQ")
+        print("\n3. Editar Informações de Alunos")
+        print("\n4. Cadastrar Oficina")
+        print("\n5. Inscrever Aluno em Oficina")
+        print("\n6. Remover Aluno da Oficina")
+        print("\n7. Associar Professor à Oficina")
+        print("\n8. Controle de Frequência")
+        print("\n9. Listar Professores")
+        print("\n10. Pesquisar Alunos")
+        print("\n11. Listar Todas as Oficinas")
+        print("\n12. Ver Oficinas de um Professor")
+        print("\n13. Ver Alunos Inscritos em uma Oficina")
+        print("\n14. FAQ - Dúvidas")
+        print("\n15. FAQ - Responder FAQ")
         print("\n0. Sair")
         print("="*22)
-        return captura_opcao(14)
+        return captura_opcao(15)
     
     elif usuario.tipo_usuario == TipoUsuario.professor:
         print("1. Cadastrar Alunos")
         print("2. Inscrever Aluno em Oficina")
-        print("3. Registrar Frequência de Aluno")
-        print("4. Listar Alunos")
+        print("3. Controle de Frequência")
+        print("4. Pesquisar Alunos")
         print("5. Listar Minhas Oficinas")
         print("6. Ver Alunos Inscritos em uma Oficina")
-        print("7. Ver Frequência de um Aluno em uma Oficina")
         print("0. Sair / Logout")
-        return captura_opcao(7)
+        return captura_opcao(6)
 
     else:
         print("Usuário sem permissão de acesso! ")
@@ -117,56 +118,64 @@ if __name__ == "__main__":
 
                 if opcao_digitada == 1:
                     os.system("cls")
-                    cadastrar_professor()
+                    Professor.cadastrar_professor()
 
                 elif opcao_digitada == 2:
                     os.system("cls")
-                    cadastrar_aluno()
+                    Aluno.cadastrar_aluno()
+
 
                 elif opcao_digitada == 3:
                     os.system("cls")
-                    cadastrar_oficina()
+                    Aluno._editar_informacoes_aluno
+
 
                 elif opcao_digitada == 4:
                     os.system("cls")
-                    Oficina.adicionar_aluno()
+                    cadastrar_oficina()
 
                 elif opcao_digitada == 5:
                     os.system("cls")
-                    Oficina.associar_professor()
+                    Oficina.adicionar_aluno()
 
                 elif opcao_digitada == 6:
                     os.system("cls")
-                    registrar_frequencia_aluno()
+                    Aluno._remover_aluno_da_oficina
 
                 elif opcao_digitada == 7:
                     os.system("cls")
-                    listar_professores()
+                    Oficina.associar_professor()
 
                 elif opcao_digitada == 8:
                     os.system("cls")
-                    listar_alunos()
+                    #ControleFrequencia.ChamarMenuFreq#
 
                 elif opcao_digitada == 9:
                     os.system("cls")
-            
+                    Professor.carregar_professores()
+
                 elif opcao_digitada == 10:
                     os.system("cls")
-                    ver_oficinas_professor()
+                    Aluno._pesquisar_alunos()
 
                 elif opcao_digitada == 11:
                     os.system("cls")
-                    Oficina.get_alunos_inscritos()
+                    #Oficina.ListarTodasOficinas()
 
                 elif opcao_digitada == 12:
                     os.system("cls")
-                    ver_alunos_frequencia_oficina()
+                    ver_oficinas_professor()
 
                 elif opcao_digitada == 13:
                     os.system("cls")
-                    add_duvida()
+                    Oficina.get_alunos_inscritos()
+
 
                 elif opcao_digitada == 14:
+                    os.system("cls")
+                    add_duvida()
+
+                elif opcao_digitada == 15:
                     os.system("cls")
                     add_resposta()
 
@@ -189,11 +198,11 @@ if __name__ == "__main__":
                 
                 elif opcao_digitada == 3:
                     os.system("cls")
-                    registrar_frequencia_aluno()
+                    #ControleFrequencia.ChamarMenu
 
                 elif opcao_digitada == 4:
                     os.system("cls")
-                    listar_alunos()
+                    Aluno._pesquisar_alunos()
 
                 elif opcao_digitada == 5:
                     os.system("cls") 
@@ -202,10 +211,6 @@ if __name__ == "__main__":
                 elif opcao_digitada == 6:
                     os.system("cls") 
                     Oficina.get_alunos_inscritos()
-
-                elif opcao_digitada == 7:
-                    os.system("cls")
-                    ver_alunos_frequencia_oficina()
 
                 elif opcao_digitada == 0:
                     os.system("cls")
