@@ -1,6 +1,7 @@
 #oficina
 # modelos/oficina.py
 
+
 import json
 
 class Oficina:
@@ -14,9 +15,7 @@ class Oficina:
         self.__capacidade_maxima = capacidade_maxima
         self.__alunos_inscritos = []
         self.__professores_associados = []
-
-    # funçoes 
-    
+        
     def get_nome(self):
         return self.__nome
 
@@ -32,6 +31,7 @@ class Oficina:
     def get_professores_associados(self):
         return self.__professores_associados
 
+
     # adicinar aluno
 
     def adicionar_aluno(self, aluno_nome):
@@ -41,7 +41,9 @@ class Oficina:
                 self.__alunos_inscritos.append(aluno_nome)
                 print(f"SUCESSO: Aluno '{aluno_nome}' inscrito na oficina '{self.__nome}'.")
                 return True
+            
             else:
+
                 print(f"AVISO: Aluno '{aluno_nome}' já está inscrito nesta oficina.")
         else:
             print(f"ERRO: A oficina '{self.__nome}' está cheia. Não é possível adicionar mais alunos.")
@@ -53,8 +55,11 @@ class Oficina:
         if aluno_nome in self.__alunos_inscritos:
             self.__alunos_inscritos.remove(aluno_nome)
             print(f"SUCESSO: Aluno '{aluno_nome}' removido da oficina '{self.__nome}'.")
+
             return True
+        
         else:
+
             print(f"ERRO: Aluno '{aluno_nome}' não encontrado nesta oficina.")
             return False
 # associa um professor
