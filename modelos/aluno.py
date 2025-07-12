@@ -311,3 +311,53 @@ class Aluno(Pessoa):
             print("\nOperação cancelada. As alterações não foram salvas.")
 
         input("Pressione Enter para continuar...")
+
+    @classmethod
+    def _cadastrar_aluno(cls):
+        ##Ju precisa mudar os nomes das variáveis, tirar os dois underscores##
+
+        os.system('cls' if os.name == "nt" else 'clear')
+
+        while True:
+            nome = Pessoa.chamar_nome()
+            while True:
+                cpf = Pessoa.chamar_cpf()
+                if any(aluno.cpf == cpf for aluno in cls.lista_de_alunos):
+                    print("ERRO: Já existe um aluno com este cpf, tente novamente")
+                else:
+                    break
+
+            email = Pessoa.chamar_email()
+            dt_nasc = Pessoa.chamar_data_nasc()
+            telefone = Pessoa.chamar_telefone()
+            genero = Pessoa.chamar_genero()
+
+            confirm = input(f"Confirma a inscrição do aluno(a):"
+                            f"Nome = {nome}"
+                            f"CPF: {cpf}"
+                            f"Email: {email}"
+                            f"Telefone: {telefone}"
+                            f"Data de Nascimento: {dt_nasc}"
+                            f"Gênero: {genero}\n"
+                            f"Pressione enter para continuar ou 0 para cancelar")
+            
+            if confirm == '0': 
+                print("Cadastro cancelado pelo utilizador...")
+                continue
+            else:
+                try:
+                    os.system('cls' if os.name == "nt" else 'clear')
+                    novo_aluno = Aluno(nome, cpf, email, dt_nasc, telefone, genero)
+                    cls.lista_de_alunos.append(novo_aluno)
+                    cls.salvar_arquivo_alunos()
+                    print("Aluno criado com sucesso")
+                    print(novo_aluno)
+
+                except ValueError as e:
+                    print(f"ERRO inesperado ao criar o aluno: {e}")
+
+            #Perguntando se o utilizador quer criar outro aluno
+            continuar = input("\nDeseja cadastrar outro aluno? (S/N): ").strip().lower()
+            if continuar != 's':
+                print("\nEncerrando o módulo de cadastro...")
+                break 
