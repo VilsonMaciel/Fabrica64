@@ -1,53 +1,41 @@
 import json
 import os
+from typing import List
 from .usuario import Usuario
-
-
-class professor:
-
-
 from .tipo_usuario import TipoUsuario
-
-
-
-from .tipo_usuario import TipoUsuario
-
 
 caminho_arquivo = "professores.json"
 
-
 class Professor(Usuario):
-    def __init__(self, nome, cpf, email, data_nasc, telefone, genero, senha, especialidade):
+    def __init__(self, nome: str, cpf: str, email: str, data_nasc: str,
+                 telefone: str, genero: str, senha: str, especialidade: str):
         super().__init__(nome, cpf, email, data_nasc, telefone, genero, senha, TipoUsuario.professor)
 
         if not especialidade or not isinstance(especialidade, str):
-            raise ValueError("Especialidade não pode estar vazia.")
+            raise ValueError("A especialidade do professor deve ser uma string não vazia.")
         
         self._especialidade = especialidade
-        self._oficinas = []
+        self._oficinas: List[object] = []
 
-    # Getter e Setter usando @property
     @property
-    def especialidade(self):
+    def especialidade(self) -> str:
         return self._especialidade
 
     @especialidade.setter
-    def especialidade(self, nova_especialidade):
+    def especialidade(self, nova_especialidade: str):
         if not nova_especialidade or not isinstance(nova_especialidade, str):
-            raise ValueError("Nova especialidade não pode estar vazia.")
+            raise ValueError("A nova especialidade deve ser uma string não vazia.")
         self._especialidade = nova_especialidade
 
-    # Métodos relacionados a oficinas
-    def adicionar_oficina_professor(self, oficina):
+    def adicionar_oficina_professor(self, oficina: object):
         if oficina not in self._oficinas:
             self._oficinas.append(oficina)
             if hasattr(oficina, "associar_professor"):
                 oficina.associar_professor(self)
 
-    def listar_oficinas_professor(self):
+    def listar_oficinas_professor(self) -> List[object]:
         return self._oficinas
 
-    # Salvar/cadastrar professor no JSON
     def cadastrar_professor(self):
         professor_dict = {
             "nome": self.nome,
@@ -62,37 +50,35 @@ class Professor(Usuario):
 
         professores = []
         if os.path.exists(caminho_arquivo):
-            with open(caminho_arquivo, "r", encoding="utf-8") as file:
-                try:
-                    professores = json.load(file)
-                except json.JSONDecodeError:
-                    professores = []
+            try:
+                with open(caminho_arquivo, "r", encoding="utf-8") as f:
+                    professores = json.load(f)
+            except json.JSONDecodeError:
+                print("Erro ao ler o arquivo de professores. Um novo será criado.")
 
         professores.append(professor_dict)
 
-        with open(caminho_arquivo, "w", encoding="utf-8") as file:
-            json.dump(professores, file, indent=4, ensure_ascii=False)
+        with open(caminho_arquivo, "w", encoding="utf-8") as f:
+            json.dump(professores, f, indent=4, ensure_ascii=False)
+        print(f"Professor {self.nome} cadastrado com sucesso.")
 
-    # Representação do professor
-    def __str__(self):
+    def __str__(self) -> str:
         return (
             f"Professor: {self.login['email']} | Nome: {self.nome} | "
             f"Especialidade: {self._especialidade} | "
-            f"Total de oficinas: {len(self._oficinas)}"
+            f"Oficinas: {len(self._oficinas)}"
         )
 
-    # Método estático para carregar todos os professores do JSON
     @staticmethod
-    def carregar_professores():
+    def carregar_professores() -> List['Professor']:
         if not os.path.exists(caminho_arquivo):
             return []
 
-        with open(caminho_arquivo, "r", encoding="utf-8") as file:
-            try:
-                dados = json.load(file)
-                professores = []
-                for p in dados:
-                    prof = Professor(
+        try:
+            with open(caminho_arquivo, "r", encoding="utf-8") as f:
+                dados = json.load(f)
+                return [
+                    Professor(
                         nome=p["nome"],
                         cpf=p["cpf"],
                         email=p["email"],
@@ -101,12 +87,20 @@ class Professor(Usuario):
                         genero=p["genero"],
                         senha=p["senha"],
                         especialidade=p["especialidade"]
-                    )
-                    professores.append(prof)
-                return professores
-            except json.JSONDecodeError:
-                return []
+                    ) for p in dados
+                ]
+        except json.JSONDecodeError:
+            print("Arquivo JSON corrompido.")
+            return []
 
+    def listar_professor(self):
+        professores = Professor.carregar_professores()
+        if not professores:
+            print("Nenhum professor cadastrado.")
+            return
+
+        for prof in professores:
+            print(prof)
 
 
 
