@@ -182,3 +182,174 @@ class ControleFrequencia:
                     
         except Exception as e:
             print(f"ERRO CRÍTICO: {str(e)}")
+    
+    def menu_registrar_frequencia(self, oficina: Oficina):
+        #submenu para registro de frequência
+        try:
+            alunos = oficina.get_alunos_inscritos()
+            if not alunos:
+                print("\nNenhum aluno matriculado nesta oficina.")
+                return
+                
+            print("\nAlunos matriculados:")
+            for i, aluno in enumerate(alunos, 1):
+                print(f"{i}. {aluno.nome} ({aluno.matricula})")
+                
+            selecao = input("\nDigite os números dos alunos (separados por vírgula) ou 'todos': ").strip()
+            
+            if selecao.lower() == 'todos':
+                alunos_selecionados = alunos
+            else:
+                alunos_selecionados = []
+                for num in selecao.split(','):
+                    try:
+                        idx = int(num.strip()) - 1
+                        if 0 <= idx < len(alunos):
+                            alunos_selecionados.append(alunos[idx])
+                        else:
+                            print(f"Índice inválido: {num}")
+                    except ValueError:
+                        print(f"Valor inválido: {num}")
+            
+            if not alunos_selecionados:
+                print("Nenhum aluno válido selecionado.")
+                return
+                
+            data_input = input("Data (dd/mm/aaaa) ou deixe em branco para hoje: ").strip()
+            try:
+                data = datetime.datetime.strptime(data_input, '%d/%m/%Y').date() if data_input else datetime.date.today()
+            except ValueError:
+                print("Formato de data inválido. Usando data atual.")
+                data = datetime.date.today()
+                
+            status = input("Status (P)resente ou (F)alta [P padrão]: ").strip().lower()
+            status = 'presente' if status in ('', 'p') else 'falta'
+            
+            if self.registrar_frequencia(oficina, alunos_selecionados, data, status):
+                print("\nFrequência registrada com sucesso!")
+            else:
+                print("\nFalha ao registrar frequência.")
+                
+        except Exception as e:
+            print(f"\nErro: {str(e)}")
+
+    def menu_editar_frequencia(self, oficina: Oficina):
+        #submenu para edição de frequência
+        try:
+            alunos = oficina.get_alunos_inscritos()
+            if not alunos:
+                print("\nNenhum aluno matriculado nesta oficina.")
+                return
+                
+            print("\nSelecione o aluno:")
+            for i, aluno in enumerate(alunos, 1):
+                print(f"{i}. {aluno.nome} ({aluno.matricula})")
+                
+            try:
+                opcao = int(input("\nDigite o número do aluno: ").strip())
+                aluno = alunos[opcao - 1]
+            except (ValueError, IndexError):
+                print("Seleção inválida.")
+                return
+                
+            registros = self.visualizar_frequencia_aluno(oficina, aluno)
+            if not registros:
+                print("\nEste aluno não possui registros de frequência.")
+                return
+                
+            print("\nDatas registradas:")
+            datas = sorted(registros.keys())  #ordena as datas
+            for i, data in enumerate(datas, 1):
+                print(f"{i}. {data} - {registros[data]}")
+                
+            try:
+                opcao_data = int(input("\nDigite o número da data para editar: ").strip())
+                data_str = datas[opcao_data - 1]
+                data = datetime.datetime.strptime(data_str, '%d/%m/%Y').date()
+            except (ValueError, IndexError):
+                print("Data inválida.")
+                return
+                
+            novo_status = input(f"Novo status para {data_str} (P)resente ou (F)alta: ").strip().lower()
+            novo_status = 'presente' if novo_status == 'p' else 'falta'
+            
+            if self.editar_frequencia(oficina, aluno, data, novo_status):
+                print("\nRegistro atualizado com sucesso!")
+            else:
+                print("\nFalha ao atualizar registro.")
+                
+        except Exception as e:
+            print(f"\nErro: {str(e)}")
+
+    def menu_visualizar_frequencia(self, oficina: Oficina):
+        #submenu para visualização de frequência individual
+        try:
+            alunos = oficina.get_alunos_inscritos()
+            if not alunos:
+                print("\nNenhum aluno matriculado nesta oficina.")
+                return
+                
+            print("\nSelecione o aluno:")
+            for i, aluno in enumerate(alunos, 1):
+                porcentagem = self.calcular_porcentagem_frequencia(oficina, aluno)
+                print(f"{i}. {aluno.nome} - {porcentagem}% de presença")
+                
+            try:
+                opcao = int(input("\nDigite o número do aluno: ").strip())
+                aluno = alunos[opcao - 1]
+            except (ValueError, IndexError):
+                print("Seleção inválida.")
+                return
+                
+            registros = self.visualizar_frequencia_aluno(oficina, aluno)
+            if not registros:
+                print("\nEste aluno não possui registros de frequência.")
+                return
+                
+            print(f"\nFrequência de {aluno.nome}:")
+            for data, status in sorted(registros.items()):
+                print(f"- {data}: {status.capitalize()}")
+                
+            porcentagem = self.calcular_porcentagem_frequencia(oficina, aluno)
+            print(f"\nPorcentagem de presença: {porcentagem}%")
+            
+        except Exception as e:
+            print(f"\nErro: {str(e)}")
+
+    def menu_listar_frequencia(self, oficina: Oficina):
+        #submenu para listagem de frequência da turma
+        try:
+            frequencia_turma = self.listar_frequencia_oficina(oficina)
+            if not frequencia_turma:
+                print("\nNenhum registro de frequência para esta oficina.")
+                return
+                
+            print(f"\nFrequência da turma - {oficina.get_nome()}:")
+            for nome, dados in sorted(frequencia_turma.items()):
+                print(f"\n{nome} ({dados['matricula']}):")
+                for data, status in sorted(dados['registros'].items()):
+                    print(f"- {data}: {status.capitalize()}")
+                print(f"Porcentagem: {dados['porcentagem']}%")
+                
+        except Exception as e:
+            print(f"\nErro: {str(e)}")
+
+    def menu_porcentagem_frequencia(self, oficina: Oficina):
+        #submenu para visualização de porcentagens de frequência
+        try:
+            frequencia_turma = self.listar_frequencia_oficina(oficina)
+            if not frequencia_turma:
+                print("\nNenhum registro de frequência para esta oficina.")
+                return
+                
+            print(f"\nPorcentagem de frequência - {oficina.get_nome()}:")
+            for nome, dados in sorted(frequencia_turma.items(), 
+                                    key=lambda x: x[1]['porcentagem'], 
+                                    reverse=True):
+                print(f"- {nome}: {dados['porcentagem']}%")
+            
+            media_turma = sum(d['porcentagem'] for d in frequencia_turma.values()) / len(frequencia_turma)
+            print(f"\nMédia da turma: {media_turma:.1f}%")
+            
+        except Exception as e:
+            print(f"\nErro: {str(e)}")
