@@ -1,6 +1,7 @@
 #oficina
 # modelos/oficina.py
 
+
 import json
 
 class Oficina:
@@ -8,7 +9,7 @@ class Oficina:
     def __init__(self, nome, descricao, capacidade_maxima):
         
         if not nome or not descricao or not isinstance(capacidade_maxima, int) or capacidade_maxima <= 0:
-            raise ValueError("Nome, descrição e capacidade_maxima (número inteiro maior que zero) são obrigatórios.")
+            raise ValueError("Nome, descrição e capacidade_maxima (número inteiro maior que zero) são obrigatorios")
 
         self.__nome = nome
         self.__descricao = descricao
@@ -34,9 +35,7 @@ class Oficina:
         return self.__professores_associados
 
     # Metodos de Alteração
-
     def adicionar_aluno(self, aluno_nome):
-
         if len(self.__alunos_inscritos) < self.__capacidade_maxima:
 
             if aluno_nome not in self.__alunos_inscritos:
