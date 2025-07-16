@@ -82,11 +82,11 @@ class Oficina:
 
         return (
 
-            f"Oficina: {self.__nome}\n"
-            f"  Descrição: {self.__descricao}\n"
-            f"  Vagas: {len(self.__alunos_inscritos)}/{self.__capacidade_maxima}\n"
-            f"  Professores: {professores_str}\n"
-            f"  Alunos: {alunos_str}"
+            f"  oficina: {self.__nome}\n"
+            f"  descrição: {self.__descricao}\n"
+            f"  vagas: {len(self.__alunos_inscritos)}/{self.__capacidade_maxima}\n"
+            f"  professores: {professores_str}\n"
+            f"  alunos: {alunos_str}"
 
         )
 
@@ -124,7 +124,7 @@ def salvar_oficina_em_json(oficina, caminho_arquivo):
 
     with open(caminho_arquivo, 'w', encoding = 'utf-8') as f:
         json.dump(oficina.to_dict(), f, ensure_ascii=False, indent=4)
-    print(f"Oficina ({oficina.get_nome()}) salva com sucesso em ({caminho_arquivo})")
+    print(f"oficina ({oficina.get_nome()}) salva com sucesso em ({caminho_arquivo})")
 
 def carregar_oficina_de_json(caminho_arquivo):
     try:
@@ -133,14 +133,14 @@ def carregar_oficina_de_json(caminho_arquivo):
             dados = json.load(f)
 
         oficina = Oficina.from_dict(dados)
-        print(f"Oficina ({oficina.get_nome()}) carregada com sucesso de ({caminho_arquivo})")
+        print(f"oficina ({oficina.get_nome()}) carregada com sucesso de ({caminho_arquivo})")
         return oficina
     
     except (FileNotFoundError, json.JSONDecodeError) as e:
-        print(f"ERRO ao carregar oficina: {e}")
+        print(f"erro ao carregar oficina: ({e})")
         return None
 
-   # -Json(Pesquisa de oficinas)
+   # Json(Pesquisa de oficinas)
 
 def carregar_todas_oficinas(caminho_arquivo):
     oficinas = []
@@ -153,7 +153,7 @@ def carregar_todas_oficinas(caminho_arquivo):
         
         if isinstance(dados, list):
             oficinas = [Oficina.from_dict(d) for d in dados]
-            print(f"{len(oficinas)} oficinas carregadas com sucesso")
+            print(f"({len(oficinas)}) oficinas carregadas com sucesso")
         else:
          
             oficinas = [Oficina.from_dict(dados)]
