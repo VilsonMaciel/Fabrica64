@@ -1,15 +1,13 @@
 #oficina
 # modelos/oficina.py
 
-
 import json
 
 class Oficina:
     
     def __init__(self, nome, descricao, capacidade_maxima):
-        
         if not nome or not descricao or not isinstance(capacidade_maxima, int) or capacidade_maxima <= 0:
-            raise ValueError("Nome, descrição e capacidade_maxima (número inteiro maior que zero) são obrigatorios")
+            raise ValueError("Nome, descrição e capacidade maxima[número inteiro maior que zero] são obrigatorios")
 
         self.__nome = nome
         self.__descricao = descricao
@@ -17,7 +15,7 @@ class Oficina:
         self.__alunos_inscritos = []
         self.__professores_associados = []
 
-    # Chamadas de funções
+    # chamadas de funções
       
     def get_nome(self):
         return self.__nome
@@ -34,8 +32,10 @@ class Oficina:
     def get_professores_associados(self):
         return self.__professores_associados
 
-    # Metodos de Alteração
+    # metodos de Alteração
+
     def adicionar_aluno(self, aluno_nome):
+
         if len(self.__alunos_inscritos) < self.__capacidade_maxima:
 
             if aluno_nome not in self.__alunos_inscritos:
@@ -47,7 +47,7 @@ class Oficina:
                 print(f"aluno ({aluno_nome}) ja está inscrito nesta oficina")
 
         else:
-            print(f" a oficina ({self.__nome}) esta cheia (Não é possível adicionar mais alunos)")
+            print(f"a oficina ({self.__nome}) esta cheia (Não é possível adicionar mais alunos)")
         return False
 
     # remove um aluno da oficina
@@ -122,11 +122,9 @@ class Oficina:
 
 def salvar_oficina_em_json(oficina, caminho_arquivo):
 
-   
     with open(caminho_arquivo, 'w', encoding = 'utf-8') as f:
-        json.dump(oficina.to_dict(), f, ensure_ascii = False, indent = 4)
-    print(f"Oficina '{oficina.get_nome()}' salva com sucesso em ({caminho_arquivo})")
-
+        json.dump(oficina.to_dict(), f, ensure_ascii=False, indent=4)
+    print(f"Oficina ({oficina.get_nome()}) salva com sucesso em ({caminho_arquivo})")
 
 def carregar_oficina_de_json(caminho_arquivo):
     try:
@@ -139,27 +137,28 @@ def carregar_oficina_de_json(caminho_arquivo):
         return oficina
     
     except (FileNotFoundError, json.JSONDecodeError) as e:
-        print(f"falha ao carregar oficina: {e}")
+        print(f"ERRO ao carregar oficina: {e}")
         return None
 
-# pesquisa de oficinas
+   # -Json(Pesquisa de oficinas)
 
 def carregar_todas_oficinas(caminho_arquivo):
     oficinas = []
 
     try:
-       
+      
         with open(caminho_arquivo, 'r', encoding = 'utf-8') as f:
             dados = json.load(f)
-    
+        
+        
         if isinstance(dados, list):
             oficinas = [Oficina.from_dict(d) for d in dados]
             print(f"{len(oficinas)} oficinas carregadas com sucesso")
-
         else:
+         
             oficinas = [Oficina.from_dict(dados)]
-            print("oficina carregada")
-        
+            print("Oficina carregada")
+            
         return oficinas
     
     except FileNotFoundError:
