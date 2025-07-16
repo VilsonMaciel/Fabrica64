@@ -311,3 +311,4 @@ class Aluno(Pessoa):
             print("\nOperação cancelada. As alterações não foram salvas.")
 
         input("Pressione Enter para continuar...")
+       
