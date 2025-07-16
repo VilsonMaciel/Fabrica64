@@ -146,7 +146,7 @@ def carregar_todas_oficinas(caminho_arquivo):
     oficinas = []
 
     try:
-      
+         
         with open(caminho_arquivo, 'r', encoding = 'utf-8') as f:
             dados = json.load(f)
         
@@ -158,7 +158,7 @@ def carregar_todas_oficinas(caminho_arquivo):
          
             oficinas = [Oficina.from_dict(dados)]
             print("Oficina carregada")
-            
+
         return oficinas
     
     except FileNotFoundError:
